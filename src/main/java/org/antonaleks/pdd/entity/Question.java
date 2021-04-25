@@ -1,7 +1,5 @@
 package org.antonaleks.pdd.entity;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,34 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Question {
-//    @JsonIgnoreProperties
-//    public Object get_id() {
-//        return _id;
-//    }
-//
-//    @JsonIgnore
-//    private Object _id;
-//
-//    @JsonIgnore
-//    @JsonAlias({"topicsJson", "_topicsJson"})
-//    private Object topicsJson;
-//
-//    @JsonIgnoreProperties
-//    @JsonAlias({"topicsJson", "_topicsJson"})
-//
-//    public Object get_topicsJson() {
-//        return topicsJson;
-//    }
-//
-//    @JsonIgnore
-//    @JsonAlias({"optionsJson", "_optionsJson"})
-//    private Object optionsJson;
-//
-//    public Object get_optionsJson() {
-//        return optionsJson;
-//    }
-
+public class Question implements JsonSerializable {
     private int number;
 
     private int id;
@@ -61,12 +32,9 @@ public class Question {
 
     @JsonDeserialize(using = ImageDeserializer.class)
     private String image;
-    //    @JsonDeserialize(using = OptionDeserializer.class)
     private String comment;
-    //    @JsonIgnore
     private int rightOption;
 
-    //    @JsonDeserialize(using = OptionDeserializer.class)
     private ArrayList<Option> options;
 
     private ArrayList<Topic> topics;

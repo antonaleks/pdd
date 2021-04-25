@@ -17,7 +17,11 @@ public class PropertiesManager {
     private static final String dbUrl;
     private static final String dbPort;
     private static final String dbName;
+    private static final String dbCollectionTopics;
 
+    public static String getDbCollectionTopics() {
+        return dbCollectionTopics;
+    }
 
     private static final String pathToProperties = "config.properties";
 
@@ -56,6 +60,7 @@ public class PropertiesManager {
 
         dbCollectionQuestion = props.getProperty("db_question");
         dbCollectionUser = props.getProperty("db_user");
+        dbCollectionTopics = props.getProperty("db_topics");
 
         dbCollectionStatistic = props.getProperty("db_statistic");
 

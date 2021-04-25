@@ -1,11 +1,9 @@
 package org.antonaleks.pdd.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.antonaleks.pdd.db.MongoHelper;
 import org.antonaleks.pdd.entity.Question;
+import org.antonaleks.pdd.entity.Topic;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Training implements Quiz {
@@ -13,11 +11,12 @@ public class Training implements Quiz {
     private List<Question> questionList;
 
     public Training(int ticketNumber, Category cat) {
-        try {
-            this.questionList = MongoHelper.getInstance().getQuestionListByTicket(ticketNumber, cat);
-        } catch (JsonProcessingException e) {
-            this.questionList = new ArrayList<>();
-        }
+        this.questionList = MongoHelper.getInstance().getQuestionListByTicket(ticketNumber, cat);
+
+    }
+
+    public Training(Topic topic, Category cat) {
+        this.questionList = MongoHelper.getInstance().getQuestionListByTopic(topic, cat);
 
     }
 

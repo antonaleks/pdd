@@ -4,18 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.util.JSON;
+import com.mongodb.client.model.Filters;
+import org.antonaleks.pdd.entity.JsonSerializable;
 import org.antonaleks.pdd.entity.Question;
+import org.antonaleks.pdd.entity.Topic;
 import org.antonaleks.pdd.model.Category;
 import org.antonaleks.pdd.utils.PropertiesManager;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,11 +50,18 @@ public final class MongoHelper {
     }
 
 
-    public List<Question> getQuestionListByTicket(int ticketId, Category cat) throws JsonProcessingException {
+    public List<Question> getQuestionListByTicket(int ticketId, Category cat) {
+
+        return getQuestionList(and((eq("ticketNumber", ticketId)), eq("cat", cat.getCategory())));
+
+    }
+
+    private List<Question> getQuestionList(Bson filter) {
         MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionQuestion());
 
         var objectMapper = new ObjectMapper();
-        var coll = collection.find(and((eq("ticketNumber", ticketId)), eq("cat", cat.getCategory()))).map(x -> {
+
+        var coll = collection.find(filter).map(x -> {
             try {
                 return objectMapper.readValue(x.toJson(), Question.class);
             } catch (JsonProcessingException e) {
@@ -65,18 +73,43 @@ public final class MongoHelper {
         var list = StreamSupport.stream(coll.spliterator(), true)
                 .collect(Collectors.toList());
         return list;
+    }
+
+    public List<Topic> getTopicList() {
+        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionTopics());
+
+        var objectMapper = new ObjectMapper();
+
+        var coll = collection.find().map(x -> {
+            try {
+                return objectMapper.readValue(x.toJson(), Topic.class);
+            } catch (JsonProcessingException e) {
+                return null;
+            }
+        });
+
+
+        var list = StreamSupport.stream(coll.spliterator(), true)
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    public List<Question> getQuestionListByTopic(Topic topic, Category cat) {
+
+        return getQuestionList(and(elemMatch("topics", Filters.eq("id", topic.getId())), eq("cat", cat.getCategory())));
 
     }
 
-    public void insertJsonMany(String json, String collectionPath) throws IOException {
+
+    public <T extends JsonSerializable> void insertJsonMany(String json, String collectionPath, String filePath) throws IOException {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
 
         var objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(json);
-        TypeReference<List<Question>> typeRef = new TypeReference<List<Question>>() {
+        var typeRef = new TypeReference<List<T>>() {
         };
-        List<Question> questions = objectMapper.readValue(jsonNode.get("questions").traverse(), typeRef);
-        String questionAsString = objectMapper.writeValueAsString(questions);
+        List<T> topics = objectMapper.readValue(jsonNode.get(filePath).traverse(), typeRef);
+        String questionAsString = objectMapper.writeValueAsString(topics);
 
         List<Document> documents = (List<Document>) objectMapper.readValue(questionAsString, List.class)
                 .stream().map(listItem -> new Document((LinkedHashMap) listItem))
