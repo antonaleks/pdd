@@ -57,6 +57,10 @@ public class Topic implements JsonSerializable {
 
     @Override
     public String toString() {
+        return id + "." + " " + name;
+    }
+
+    public String toStringJson() {
         try {
             return new ObjectMapper().writeValueAsString(this);
         } catch (JsonProcessingException e) {

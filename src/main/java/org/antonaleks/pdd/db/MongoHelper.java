@@ -75,14 +75,14 @@ public final class MongoHelper {
         return list;
     }
 
-    public List<Topic> getTopicList() {
-        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionTopics());
+    public <T extends JsonSerializable> List<T> getDocumentList(Class<T> classType, String collectionPath) {
+        MongoCollection<Document> collection = database.getCollection(collectionPath);
 
         var objectMapper = new ObjectMapper();
 
         var coll = collection.find().map(x -> {
             try {
-                return objectMapper.readValue(x.toJson(), Topic.class);
+                return objectMapper.readValue(x.toJson(), classType);
             } catch (JsonProcessingException e) {
                 return null;
             }
@@ -101,15 +101,27 @@ public final class MongoHelper {
     }
 
 
-    public <T extends JsonSerializable> void insertJsonMany(String json, String collectionPath, String filePath) throws IOException {
+    public <T extends JsonSerializable> void insertJsonMany(String json, String collectionPath, String filePath, TypeReference<List<T>> typeRef) throws IOException {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
 
         var objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(json);
-        var typeRef = new TypeReference<List<T>>() {
-        };
         List<T> topics = objectMapper.readValue(jsonNode.get(filePath).traverse(), typeRef);
         String questionAsString = objectMapper.writeValueAsString(topics);
+
+        List<Document> documents = (List<Document>) objectMapper.readValue(questionAsString, List.class)
+                .stream().map(listItem -> new Document((LinkedHashMap) listItem))
+                .collect(Collectors.toList());
+
+        collection.insertMany(documents);
+
+    }
+
+    public <T extends JsonSerializable> void insertJsonMany(List<T> objectList, String collectionPath) throws IOException {
+        MongoCollection<Document> collection = database.getCollection(collectionPath);
+        var objectMapper = new ObjectMapper();
+
+        String questionAsString = objectMapper.writeValueAsString(objectList);
 
         List<Document> documents = (List<Document>) objectMapper.readValue(questionAsString, List.class)
                 .stream().map(listItem -> new Document((LinkedHashMap) listItem))
@@ -125,5 +137,6 @@ public final class MongoHelper {
         collection.deleteMany(new Document());
 
     }
+
 
 }

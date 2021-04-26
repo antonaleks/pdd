@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.antonaleks.pdd.controllers.MainFormController">
+    <children>
+        <VBox prefHeight="513.0" prefWidth="759.0">
+            <children>
+                <JFXListView fx:id="topicsListView" prefHeight="267.0" prefWidth="759.0"/>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

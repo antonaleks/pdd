@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.antonaleks.pdd.db.MongoHelper;
 import org.antonaleks.pdd.entity.Question;
 import org.antonaleks.pdd.entity.Topic;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 public class MongoTest {
@@ -30,8 +32,9 @@ public class MongoTest {
         while (sc.hasNext()) {
             sb.append(sc.nextLine());
         }
-
-        MongoHelper.getInstance().<Question>insertJsonMany(sb.toString(), PropertiesManager.getDbCollectionQuestion(), "questions");
+        var typeRef = new TypeReference<List<Question>>() {
+        };
+        MongoHelper.getInstance().<Question>insertJsonMany(sb.toString(), PropertiesManager.getDbCollectionQuestion(), "questions", typeRef);
 
     }
 
@@ -47,8 +50,9 @@ public class MongoTest {
         while (sc.hasNext()) {
             sb.append(sc.nextLine());
         }
-
-        MongoHelper.getInstance().<Topic>insertJsonMany(sb.toString(), PropertiesManager.getDbCollectionTopics(), "topics");
+        var typeRef = new TypeReference<List<Topic>>() {
+        };
+        MongoHelper.getInstance().<Topic>insertJsonMany(sb.toString(), PropertiesManager.getDbCollectionTopics(), "topics", typeRef);
 
     }
 
