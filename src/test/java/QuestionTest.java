@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.antonaleks.pdd.utils.PropertiesManager;
 import org.bson.Document;
 import org.antonaleks.pdd.entity.Question;
 import org.antonaleks.pdd.utils.ResourceHelper;
@@ -29,15 +30,15 @@ public class QuestionTest {
             sb.append(sc.nextLine());
         }
 
-        var objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
         Question question = objectMapper.readValue(sb.toString(), Question.class);
 
-        MongoClient mongoClient = new MongoClient("localhost");
+        MongoClient mongoClient = new MongoClient(PropertiesManager.getDbUrl());
 
-        MongoDatabase database = mongoClient.getDatabase("test");
+        MongoDatabase database = mongoClient.getDatabase(PropertiesManager.getDbName());
 
-        MongoCollection<Document> collection = database.getCollection("question");
+        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionQuestion());
 
         Document myDoc = collection.find().first();
         Question question_from_db = objectMapper.readValue(myDoc.toJson(), Question.class);

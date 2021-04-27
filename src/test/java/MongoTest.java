@@ -32,7 +32,7 @@ public class MongoTest {
         while (sc.hasNext()) {
             sb.append(sc.nextLine());
         }
-        var typeRef = new TypeReference<List<Question>>() {
+        TypeReference<List<Question>> typeRef = new TypeReference<List<Question>>() {
         };
         MongoHelper.getInstance().<Question>insertJsonMany(sb.toString(), PropertiesManager.getDbCollectionQuestion(), "questions", typeRef);
 
@@ -50,7 +50,7 @@ public class MongoTest {
         while (sc.hasNext()) {
             sb.append(sc.nextLine());
         }
-        var typeRef = new TypeReference<List<Topic>>() {
+        TypeReference<List<Topic>> typeRef = new TypeReference<List<Topic>>() {
         };
         MongoHelper.getInstance().<Topic>insertJsonMany(sb.toString(), PropertiesManager.getDbCollectionTopics(), "topics", typeRef);
 

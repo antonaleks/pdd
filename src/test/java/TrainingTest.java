@@ -6,11 +6,13 @@ import org.antonaleks.pdd.model.Training;
 import org.antonaleks.pdd.utils.PropertiesManager;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class TrainingTest {
     @Test
     void testNewTrainingByTopic() {
-        var topics = MongoHelper.getInstance().getDocumentList(Topic.class, PropertiesManager.getDbCollectionTopics());
-        var training = new Training(topics.get(0), Category.AB);
+        List<Topic> topics = MongoHelper.getInstance().getDocumentList(Topic.class, PropertiesManager.getDbCollectionTopics());
+        Training training = new Training(topics.get(0), Category.AB);
         training.run();
     }
 
@@ -21,7 +23,7 @@ public class TrainingTest {
 
     @Test
     void testNewTrainingByTicket() {
-        var training = new Training(1, Category.AB);
+        Training training = new Training(1, Category.AB);
         training.run();
     }
 }

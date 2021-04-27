@@ -5,8 +5,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Filters;
 import org.antonaleks.pdd.entity.JsonSerializable;
 import org.antonaleks.pdd.entity.Question;
@@ -32,7 +34,11 @@ public final class MongoHelper {
     private MongoClient mongoClient;
 
     private MongoHelper() {
-        this.mongoClient = new MongoClient(PropertiesManager.getDbUrl());
+
+        MongoClientURI uri = new MongoClientURI(PropertiesManager.getDbUrl());
+
+
+        this.mongoClient = new MongoClient(uri);
 
         this.database = mongoClient.getDatabase(PropertiesManager.getDbName());
 
@@ -59,9 +65,9 @@ public final class MongoHelper {
     private List<Question> getQuestionList(Bson filter) {
         MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionQuestion());
 
-        var objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        var coll = collection.find(filter).map(x -> {
+        MongoIterable coll = collection.find(filter).map(x -> {
             try {
                 return objectMapper.readValue(x.toJson(), Question.class);
             } catch (JsonProcessingException e) {
@@ -70,7 +76,7 @@ public final class MongoHelper {
         });
 
 
-        var list = StreamSupport.stream(coll.spliterator(), true)
+        List<Question>  list = (List<Question> )StreamSupport.stream(coll.spliterator(), true)
                 .collect(Collectors.toList());
         return list;
     }
@@ -78,9 +84,9 @@ public final class MongoHelper {
     public <T extends JsonSerializable> List<T> getDocumentList(Class<T> classType, String collectionPath) {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
 
-        var objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        var coll = collection.find().map(x -> {
+        MongoIterable coll = collection.find().map(x -> {
             try {
                 return objectMapper.readValue(x.toJson(), classType);
             } catch (JsonProcessingException e) {
@@ -89,7 +95,7 @@ public final class MongoHelper {
         });
 
 
-        var list = StreamSupport.stream(coll.spliterator(), true)
+        List<T> list = ( List<T>)StreamSupport.stream(coll.spliterator(), true)
                 .collect(Collectors.toList());
         return list;
     }
@@ -104,7 +110,7 @@ public final class MongoHelper {
     public <T extends JsonSerializable> void insertJsonMany(String json, String collectionPath, String filePath, TypeReference<List<T>> typeRef) throws IOException {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
 
-        var objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(json);
         List<T> topics = objectMapper.readValue(jsonNode.get(filePath).traverse(), typeRef);
         String questionAsString = objectMapper.writeValueAsString(topics);
@@ -119,7 +125,7 @@ public final class MongoHelper {
 
     public <T extends JsonSerializable> void insertJsonMany(List<T> objectList, String collectionPath) throws IOException {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
-        var objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
         String questionAsString = objectMapper.writeValueAsString(objectList);
 
