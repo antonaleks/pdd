@@ -4,9 +4,7 @@
     <facet type="jpa" name="JPA">
       <configuration>
         <setting name="validation-enabled" value="true" />
-        <datasource-mapping>
-          <factory-entry name="backend-fx" />
-        </datasource-mapping>
+        <datasource-mapping />
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -41,5 +39,8 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.0" level="project" />
     <orderEntry type="library" name="Maven: javax.persistence:javax.persistence-api:2.2" level="project" />
     <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:8.0.10" level="project" />
+    <orderEntry type="library" name="Maven: io.datafx:flow:8.0.1" level="project" />
+    <orderEntry type="library" name="Maven: io.datafx:core:8.0.1" level="project" />
+    <orderEntry type="library" name="Maven: io.datafx:datafx:8.0.1" level="project" />
   </component>
 </module>

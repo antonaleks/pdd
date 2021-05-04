@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<StackPane stylesheets="@/css/jfoenix-components.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" >
+    <children>
+        <JFXNodesList fx:id="nodesList" rotate="180.0" spacing="15"
+                      StackPane.alignment="BOTTOM_RIGHT">
+            <children>
+                <JFXButton fx:id="newButton"
+                           styleClass="main-button">
+                    <Label>Material Design</Label>
+
+                </JFXButton>
+                <JFXButton fx:id="fileButton"  onAction="#onNewFile" styleClass="animated-option-button">
+                    <graphic>
+                        <Label>Material Design</Label>
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="commentButton"  onAction="#onNewComment" styleClass="animated-option-button">
+                    <graphic>
+                        <Label>Material Design</Label>
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="filterButton"  onAction="#onNewFilter" styleClass="animated-option-button">
+                    <graphic>
+                        <Label>Material Design</Label>
+                    </graphic>
+                </JFXButton>
+            </children>
+            <StackPane.margin>
+                <Insets bottom="50.0" right="50.0" />
+            </StackPane.margin>
+        </JFXNodesList>
+    </children>
+</StackPane>

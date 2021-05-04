@@ -4,17 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Filters;
 import org.antonaleks.pdd.entity.JsonSerializable;
 import org.antonaleks.pdd.entity.Question;
+import org.antonaleks.pdd.entity.Ticket;
 import org.antonaleks.pdd.entity.Topic;
 import org.antonaleks.pdd.model.Category;
 import org.antonaleks.pdd.utils.PropertiesManager;
+import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -106,6 +108,12 @@ public final class MongoHelper {
 
     }
 
+    public Ticket getTicketByNumber(int number, Category cat) {
+
+        return new Ticket(getQuestionList(and(Filters.eq("ticketNumber", number), eq("cat", cat.getCategory()))), number);
+
+    }
+
 
     public <T extends JsonSerializable> void insertJsonMany(String json, String collectionPath, String filePath, TypeReference<List<T>> typeRef) throws IOException {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
@@ -142,6 +150,15 @@ public final class MongoHelper {
 
         collection.deleteMany(new Document());
 
+
+    }
+
+    public int getMaxTicket(){
+        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionQuestion());
+        DBObject sort = new BasicDBObject();
+        sort.put("ticketNumber",-1);
+        MongoCursor cursor= collection.find().sort((Bson) sort).limit(1).cursor();
+        return (int) ((Document)cursor.next()).get("ticketNumber");
     }
 
 
