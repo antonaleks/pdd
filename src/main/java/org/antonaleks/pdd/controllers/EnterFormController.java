@@ -35,16 +35,16 @@ public class EnterFormController extends BaseController {
     @FXML
     private PasswordField passwordField;
 
-    private MainFormController openScene ;
+    private MainFormNewController openScene ;
 
     @PostConstruct
     public void init() throws Exception {
         // init the title hamburger icon
-        final JFXTooltip burgerTooltip = new JFXTooltip("Open drawer");
+//        final JFXTooltip burgerTooltip = new JFXTooltip("Open drawer");
 
 
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/enterForm.fxml"));
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/enterForm.fxml"));
 //        loader.setController(new InputController());
 //        toolbarPopup = new JFXPopup(loader.load());
 
@@ -54,7 +54,7 @@ public class EnterFormController extends BaseController {
 //                        JFXPopup.PopupHPosition.RIGHT,
 //                        -12,
 //                        15));
-        JFXTooltip.setVisibleDuration(Duration.millis(3000));
+//        JFXTooltip.setVisibleDuration(Duration.millis(3000));
 //        JFXTooltip.install(titleBurgerContainer, burgerTooltip, Pos.BOTTOM_CENTER);
 
         // create the inner flow and content
@@ -77,24 +77,24 @@ public class EnterFormController extends BaseController {
     }
 
     public void buttonEnter(ActionEvent actionEvent) throws IOException {
-//        User newUser = new User(loginField.getText(), passwordField.getText());
-//        List<User> userList = MongoHelper.getInstance().getDocumentList(User.class, PropertiesManager.getDbCollectionUser());
-//        User currentUser = userList.stream().filter(user -> user.equals(newUser)).findFirst().orElse(null);
-//
-//        if (currentUser != null) {
-//            Parent root = FXMLLoader.load(getClass().getResource("/fxml/main2.fxml"));
-////            loadModalWindow(actionEvent, "Главное меню", root);
-//            openScene = new MainFormController();
-//
-//            Stage stage = (Stage) enterButton.getScene().getWindow();
-//            try {
+        User newUser = new User(loginField.getText(), passwordField.getText());
+        List<User> userList = MongoHelper.getInstance().getDocumentList(User.class, PropertiesManager.getDbCollectionUser());
+        User currentUser = userList.stream().filter(user -> user.equals(newUser)).findFirst().orElse(null);
+
+        if (currentUser != null) {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainForm.fxml"));
+//            loadModalWindow(actionEvent, "Главное меню", root);
+            openScene = new MainFormNewController();
+
+            Stage stage = (Stage) enterButton.getScene().getWindow();
+            try {
 //                openScene.start(stage);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            loginField.getStyleClass().add("wrong-credentials");
-//            passwordField.getStyleClass().add("wrong-credentials");
-//        }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            loginField.getStyleClass().add("wrong-credentials");
+            passwordField.getStyleClass().add("wrong-credentials");
+        }
     }
 }

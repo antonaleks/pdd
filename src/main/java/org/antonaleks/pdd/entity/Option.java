@@ -47,10 +47,6 @@ public class Option implements JsonSerializable {
 
     @Override
     public String toString() {
-        try {
-            return new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            return null;
-        }
+            return id + ". " + text;
     }
 }

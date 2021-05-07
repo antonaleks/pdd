@@ -5,7 +5,7 @@ import com.jfoenix.controls.JFXNodesList;
 import io.datafx.controller.ViewController;
 import javafx.fxml.FXML;
 
-@ViewController(value = "/fxml/NodesList.fxml", title = "Material Design Example")
+@ViewController(value = "/fxml/NodesList.fxml", title = "PDD")
 public class NodesListController {
 
     @FXML

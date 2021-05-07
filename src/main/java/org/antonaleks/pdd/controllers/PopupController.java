@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Objects;
 
-@ViewController(value = "/fxml/Popups.fxml", title = "Material Design Example")
+@ViewController(value = "/fxml/Popups.fxml", title = "PDD")
 public final class PopupController {
 
     @FXML

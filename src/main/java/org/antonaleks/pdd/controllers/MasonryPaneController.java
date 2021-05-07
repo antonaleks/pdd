@@ -1,5 +1,6 @@
 package org.antonaleks.pdd.controllers;
 
+import com.jfoenix.assets.JFoenixResources;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXButton.ButtonType;
 import com.jfoenix.controls.JFXMasonryPane;
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
 
 import static javafx.animation.Interpolator.EASE_BOTH;
 
-@ViewController(value = "/fxml/Masonrys.fxml", title = "Material Design Example")
+@ViewController(value = "/fxml/Masonrys.fxml", title = "PDD")
 public class MasonryPaneController {
 
     @FXML
@@ -58,13 +59,13 @@ public class MasonryPaneController {
     @PostConstruct
     public void init() {
         ArrayList<Node> children = new ArrayList<>();
-        List<Question> questions = MongoHelper.getInstance().getDocumentList(Question.class, PropertiesManager.getDbCollectionQuestion());
-        ObservableList<Object> observableList = FXCollections.observableArrayList();
+//        List<Question> questions = MongoHelper.getInstance().getDocumentList(Question.class, PropertiesManager.getDbCollectionQuestion());
+//        ObservableList<Object> observableList = FXCollections.observableArrayList();
+//
+//        observableList.setAll(questions);
 
-        observableList.setAll(questions);
 
-
-        for (int i =1;i<= MongoHelper.getInstance().getMaxTicket();i++) {
+        for (int i =1;i<= 40;i++) {
             JFXButton button  =new JFXButton();
             button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;");
             button.setText(""+ i);
@@ -82,6 +83,10 @@ public class MasonryPaneController {
                 openScene = loader.getController();
                 Stage stage = (Stage) button.getScene().getWindow();
                 Scene scene =  new Scene(root);
+                final ObservableList<String> stylesheets = scene.getStylesheets();
+                stylesheets.addAll(JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm(),
+                        JFoenixResources.load("css/jfoenix-design.css").toExternalForm(),
+                        getClass().getResource("/css/jfoenix-main-demo.css").toExternalForm());
                 stage.setScene(scene);
                 try {
                     openScene.start(stage,Integer.parseInt(button.getText()));

@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXMasonryPane?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
 
 <StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.antonaleks.pdd.controllers.MainFormController">
     <children>
         <VBox prefHeight="747.0" prefWidth="1116.0">
             <children>
+            <JFXMasonryPane fx:id="masonryPane"/>
+            <StackPane prefHeight="150.0" prefWidth="200.0" />
+            <TextFlow prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label prefHeight="21.0" prefWidth="437.0" text="Label" fx:id="textQuestion"/>
+               </children>
+            </TextFlow>
                 <JFXListView fx:id="topicsListView" prefHeight="267.0" prefWidth="759.0" />
             </children>
         </VBox>

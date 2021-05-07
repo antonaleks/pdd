@@ -30,24 +30,24 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         MongoHelper.getInstance();
 
-//        Parent root = FXMLLoader.load(getClass().getResource("/fxml/enterForm.fxml"));
-//        primaryStage.setTitle("Вход в систему");
-//        primaryStage.setScene(new Scene(root));
-//        primaryStage.setResizable(false);
-//        primaryStage.show();
+//        Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainForm.fxml"));
+//        stage.setTitle("Вход в систему");
+//        stage.setScene(new Scene(root));
+//        stage.setResizable(false);
+//        stage.show();
 
         Flow flow = new Flow(MainController.class);
         DefaultFlowContainer container = new DefaultFlowContainer();
         flowContext = new ViewFlowContext();
         flowContext.register("Stage", stage);
         flow.createHandler(flowContext).start(container);
-
-
+//
+//
         JFXDecorator decorator = new JFXDecorator(stage, container.getView());
         decorator.setCustomMaximize(true);
         decorator.setGraphic(new SVGGlyph(""));
 
-        stage.setTitle("JFoenix Demo");
+        stage.setTitle("ПДД");
 
         double width = 800;
         double height = 600;

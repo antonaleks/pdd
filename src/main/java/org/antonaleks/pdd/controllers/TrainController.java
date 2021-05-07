@@ -1,6 +1,6 @@
 package org.antonaleks.pdd.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXListView;
 import io.datafx.controller.ViewController;
 import io.datafx.controller.flow.Flow;
 import io.datafx.controller.flow.FlowException;
@@ -18,8 +18,8 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Objects;
 
-@ViewController(value = "/fxml/SideMenu.fxml", title = "PDD")
-public class SideMenuController {
+@ViewController(value = "/fxml/Train.fxml", title = "PDD")
+public class TrainController {
 
     @FXMLViewFlowContext
     private ViewFlowContext context;
@@ -36,9 +36,7 @@ public class SideMenuController {
 
     @FXML
     private JFXListView<Label> sideList;
-    /**
-     * init fxml when loaded.
-     */
+
     @PostConstruct
     public void init() throws IOException {
         Objects.requireNonNull(context, "context");
@@ -60,7 +58,7 @@ public class SideMenuController {
             }).start();
         });
         Flow contentFlow = (Flow) context.getRegisteredObject("ContentFlow");
-        bindNodeToController(trainByNum, TicketByNumberController.class, contentFlow, contentFlowHandler);
+        bindNodeToController(trainByNum, TrainController.class, contentFlow, contentFlowHandler);
         bindNodeToController(trainByTheme, MasonryPaneController.class, contentFlow, contentFlowHandler);
 
         bindNodeToController(exam, PopupController.class, contentFlow, contentFlowHandler);
@@ -70,5 +68,4 @@ public class SideMenuController {
     private void bindNodeToController(Node node, Class<?> controllerClass, Flow flow, FlowHandler flowHandler) {
         flow.withGlobalLink(node.getId(), controllerClass);
     }
-
 }

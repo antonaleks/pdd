@@ -20,7 +20,7 @@ import javax.annotation.PostConstruct;
 
 import static io.datafx.controller.flow.container.ContainerAnimations.SWIPE_LEFT;
 
-@ViewController(value = "/fxml/Main.fxml", title = "Material Design Example")
+@ViewController(value = "/fxml/Main.fxml", title = "PDD")
 public final class MainController {
 
     @FXMLViewFlowContext
@@ -87,7 +87,7 @@ public final class MainController {
         // create the inner flow and content
         context = new ViewFlowContext();
         // set the default controller
-        Flow innerFlow = new Flow(ButtonController.class);
+        Flow innerFlow = new Flow(TicketByNumberController.class);
 
         final FlowHandler flowHandler = innerFlow.createHandler(context);
         context.register("ContentFlowHandler", flowHandler);
