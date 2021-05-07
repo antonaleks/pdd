@@ -5,6 +5,7 @@ import java.util.List;
 public class Ticket {
     private List<Question> questions;
 
+
     public List<Question> getQuestions() {
         return questions;
     }
@@ -19,4 +20,5 @@ public class Ticket {
         this.questions = questions;
         this.id = id;
     }
+
 }

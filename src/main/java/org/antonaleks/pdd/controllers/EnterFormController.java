@@ -35,45 +35,9 @@ public class EnterFormController extends BaseController {
     @FXML
     private PasswordField passwordField;
 
-    private MainFormNewController openScene ;
-
     @PostConstruct
     public void init() throws Exception {
-        // init the title hamburger icon
-//        final JFXTooltip burgerTooltip = new JFXTooltip("Open drawer");
 
-
-
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/enterForm.fxml"));
-//        loader.setController(new InputController());
-//        toolbarPopup = new JFXPopup(loader.load());
-
-//        optionsBurger.setOnMouseClicked(e ->
-//                toolbarPopup.show(optionsBurger,
-//                        JFXPopup.PopupVPosition.TOP,
-//                        JFXPopup.PopupHPosition.RIGHT,
-//                        -12,
-//                        15));
-//        JFXTooltip.setVisibleDuration(Duration.millis(3000));
-//        JFXTooltip.install(titleBurgerContainer, burgerTooltip, Pos.BOTTOM_CENTER);
-
-        // create the inner flow and content
-//        context = new ViewFlowContext();
-        // set the default controller
-//        Flow innerFlow = new Flow(ButtonController.class);
-//
-//        final FlowHandler flowHandler = innerFlow.createHandler(context);
-//        context.register("ContentFlowHandler", flowHandler);
-//        context.register("ContentFlow", innerFlow);
-//        final Duration containerAnimationDuration = Duration.millis(320);
-//        drawer.setContent(flowHandler.start(new ExtendedAnimatedFlowContainer(containerAnimationDuration, SWIPE_LEFT)));
-//        context.register("ContentPane", drawer.getContent().get(0));
-
-//        // side controller will add links to the content flow
-//        Flow sideMenuFlow = new Flow(SideMenuController.class);
-//        final FlowHandler sideMenuFlowHandler = sideMenuFlow.createHandler(context);
-//        drawer.setSidePane(sideMenuFlowHandler.start(new ExtendedAnimatedFlowContainer(containerAnimationDuration,
-//                SWIPE_LEFT)));
     }
 
     public void buttonEnter(ActionEvent actionEvent) throws IOException {
@@ -84,7 +48,7 @@ public class EnterFormController extends BaseController {
         if (currentUser != null) {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainForm.fxml"));
 //            loadModalWindow(actionEvent, "Главное меню", root);
-            openScene = new MainFormNewController();
+//            openScene = new MainFormNewController();
 
             Stage stage = (Stage) enterButton.getScene().getWindow();
             try {

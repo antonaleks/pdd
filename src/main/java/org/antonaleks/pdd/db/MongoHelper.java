@@ -78,7 +78,7 @@ public final class MongoHelper {
         });
 
 
-        List<Question>  list = (List<Question> )StreamSupport.stream(coll.spliterator(), true)
+        List<Question> list = (List<Question>) StreamSupport.stream(coll.spliterator(), true)
                 .collect(Collectors.toList());
         return list;
     }
@@ -97,7 +97,7 @@ public final class MongoHelper {
         });
 
 
-        List<T> list = ( List<T>)StreamSupport.stream(coll.spliterator(), true)
+        List<T> list = (List<T>) StreamSupport.stream(coll.spliterator(), true)
                 .collect(Collectors.toList());
         return list;
     }
@@ -111,6 +111,12 @@ public final class MongoHelper {
     public Ticket getTicketByNumber(int number, Category cat) {
 
         return new Ticket(getQuestionList(and(Filters.eq("ticketNumber", number), eq("cat", cat.getCategory()))), number);
+
+    }
+
+    public Ticket getTicketByTopic(Topic topic, Category cat) {
+
+        return new Ticket(getQuestionList(and(elemMatch("topics", Filters.eq("id", topic.getId())), eq("cat", cat.getCategory()))), topic.getId());
 
     }
 
@@ -153,12 +159,12 @@ public final class MongoHelper {
 
     }
 
-    public int getMaxTicket(){
+    public int getMaxTicket() {
         MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionQuestion());
         DBObject sort = new BasicDBObject();
-        sort.put("ticketNumber",-1);
-        MongoCursor cursor= collection.find().sort((Bson) sort).limit(1).cursor();
-        return (int) ((Document)cursor.next()).get("ticketNumber");
+        sort.put("ticketNumber", -1);
+        MongoCursor cursor = collection.find().sort((Bson) sort).limit(1).cursor();
+        return (int) ((Document) cursor.next()).get("ticketNumber");
     }
 
 

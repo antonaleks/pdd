@@ -9,15 +9,11 @@ import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.antonaleks.pdd.controllers.EnterFormController;
 import org.antonaleks.pdd.controllers.MainController;
-import org.antonaleks.pdd.controllers.MainFormController;
 import org.antonaleks.pdd.db.MongoHelper;
 import io.datafx.controller.flow.container.DefaultFlowContainer;
 
