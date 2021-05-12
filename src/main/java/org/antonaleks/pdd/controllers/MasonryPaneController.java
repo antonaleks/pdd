@@ -25,6 +25,7 @@ import java.util.ArrayList;
 @ViewController(value = "/fxml/Masonrys.fxml", title = "PDD")
 public class MasonryPaneController {
 
+    public static final String BUTTON_BACKGROUND_COLOR = "#5264AE";
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -45,7 +46,7 @@ public class MasonryPaneController {
 
         for (int i =1;i<= 40;i++) {
             JFXButton button  =new JFXButton();
-            button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;");
+            button.setStyle("-fx-text-fill:WHITE;-fx-background-color:" + BUTTON_BACKGROUND_COLOR + ";-fx-font-size:14px;");
             button.setText(""+ i);
             children.add(button);
             button.setOnMouseClicked(e -> {

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 @ViewController(value = "/fxml/TicketsByNumber.fxml", title = "PDD")
-public class TicketByNumberController extends BaseController{
+public class TicketByNumberController extends BaseController {
 
     @FXML
     private ScrollPane scrollPane;
@@ -38,15 +38,16 @@ public class TicketByNumberController extends BaseController{
     private JFXMasonryPane masonryPane;
     @FXMLViewFlowContext
     private ViewFlowContext context;
+
     @PostConstruct
     public void init() {
         ArrayList<Node> children = new ArrayList<>();
 
-        for (int i =1;i<= 40;i++) {
-            JFXButton button  =new JFXButton();
+        for (int i = 1; i <= 40; i++) {
+            JFXButton button = new JFXButton();
 
             button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;");
-            button.setText(""+ i);
+            button.setText("" + i);
 
             children.add(button);
 
@@ -63,7 +64,7 @@ public class TicketByNumberController extends BaseController{
                 NewTrainController dataController = loader.getController();
 
                 try {
-                    dataController.initialize(Integer.parseInt( button.getText()));
+                    dataController.initialize(Integer.parseInt(button.getText()));
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }

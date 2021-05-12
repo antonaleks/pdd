@@ -8,22 +8,63 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.antonaleks.pdd.controllers.NewTrainController">
+<?import javafx.scene.text.Text?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import com.jfoenix.controls.JFXDialog?>
+<?import javafx.scene.layout.HBox?>
+<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.antonaleks.pdd.controllers.NewTrainController">
     <children>
         <VBox prefHeight="747.0" prefWidth="1116.0">
             <children>
-            <StackPane fx:id="buttonStackPane" prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <JFXMasonryPane fx:id="masonryPane" />
-               </children></StackPane>
-            <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" />
-            <TextFlow prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Label fx:id="textQuestion" prefHeight="120.0" prefWidth="1100.0" text="Label" />
-               </children>
-            </TextFlow>
-                <JFXListView fx:id="topicsListView" prefHeight="267.0" prefWidth="759.0" />
+                <Label fx:id="timerLabel" layoutX="132.0" layoutY="92.0" prefHeight="17.0" prefWidth="65.0"
+                       textFill="#f20b0b">
+                </Label>
+                <JFXButton fx:id="alertButton" prefWidth="220" prefHeight="30"
+                           styleClass="dialog-trigger"> Подсказка
+                </JFXButton>
+                <StackPane fx:id="buttonStackPane" prefHeight="150.0" prefWidth="200.0">
+                    <children>
+                        <JFXMasonryPane fx:id="masonryPane"/>
+                    </children>
+                </StackPane>
+                <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true"
+                           preserveRatio="true"/>
+                <TextFlow prefHeight="200.0" prefWidth="200.0">
+                    <children>
+                        <Label fx:id="textQuestion" prefHeight="120.0" prefWidth="1100.0" text="Label"/>
+                    </children>
+                </TextFlow>
+                <JFXListView fx:id="topicsListView" prefHeight="267.0" prefWidth="759.0"/>
+                <HBox>
+                    <JFXButton fx:id="closeButton"  onAction="#terminateTraining" prefWidth="220" prefHeight="30"
+                               buttonType="RAISED" style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;"> Завершить тестирование
+                    </JFXButton>
+                    <JFXButton fx:id="nextButton" onAction="#nextQuestion" prefWidth="220" prefHeight="30"
+                               buttonType="RAISED" style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;"> Следующий вопрос
+                    </JFXButton>
+                </HBox>
             </children>
         </VBox>
     </children>
+    <JFXDialog fx:id="dialog">
+        <JFXDialogLayout>
+            <heading>
+                <Label>JFoenix Dialog</Label>
+            </heading>
+            <body>
+                <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                    enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                    nisi ut aliquip ex ea commodo consequat.
+                </Label>
+            </body>
+            <actions>
+                <JFXButton fx:id="acceptButton" styleClass="dialog-accept">ACCEPT
+                </JFXButton>
+            </actions>
+        </JFXDialogLayout>
+    </JFXDialog>
 </StackPane>
