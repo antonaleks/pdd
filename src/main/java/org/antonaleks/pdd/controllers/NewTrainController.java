@@ -4,8 +4,6 @@ import com.jfoenix.controls.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,9 +14,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.Duration;
 import org.antonaleks.pdd.entity.Option;
 import org.antonaleks.pdd.entity.Question;
@@ -52,12 +50,12 @@ public class NewTrainController extends BaseController {
     private List<JFXButton> buttons;
     private int currentQuestion;
     private Training training;
-    private HashMap<String, Callback> history;
+    private HashMap<String, JFXListView> history;
 
 
     @FXML
     public void initialize(int numberTicket) throws IOException {
-        history = new HashMap<String, javafx.util.Callback>();
+        history = new HashMap<String, JFXListView>();
 
         alertButton.setOnAction(action -> {
             JFXAlert alert = new JFXAlert((Stage) alertButton.getScene().getWindow());
@@ -81,7 +79,7 @@ public class NewTrainController extends BaseController {
         for (Question question :
                 training.getTicket().getQuestions()) {
             JFXButton button = new JFXButton();
-            button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:8px;");
+            button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;");
             button.setText("" + i++);
             button.setOnMouseClicked(e -> {
                 currentQuestion = Integer.parseInt(button.getText());
@@ -122,52 +120,57 @@ public class NewTrainController extends BaseController {
         currentQuestion = 1;
 
 
-
-
     }
 
     private void setQuestionForButton(Question question, JFXButton button) {
-        ObservableList<Object> observableListQuestion = FXCollections.observableArrayList();
 
         currentTip = question.getComment();
 
         textQuestion.setText(question.getText());
 
+
+//        if (!history.containsKey(button.getText())) {
+        ObservableList<Object> observableListQuestion = FXCollections.observableArrayList();
         observableListQuestion.setAll(question.getOptions());
+
         topicsListView.setItems(observableListQuestion);
 
-        if (!history.containsKey(button.getText())) {
 
-            topicsListView.setCellFactory(i -> new ListCell<Option>() {
-                private boolean correct = false;
 
-                @Override
-                public void updateItem(Option item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item != null) {
-                        correct = question.getRightOption() == item.getId();
-                        setText(item.toString());
-                    }
-                }
+        topicsListView.setCellFactory(i -> new ListCell<Option>() {
+            private boolean correct = false;
 
-                @Override
-                public void updateSelected(boolean selected) {
-                    super.updateSelected(selected);
-                    if (selected) {
+            @Override
+            public void updateItem(Option item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null) {
+                    Text text = new Text(item.toString());
+                    text.setWrappingWidth(700);
+                    correct = question.getRightOption() == item.getId();
+                    setGraphic(text);
+                    if (item.isChecked())
                         setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
-                        if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
-                            button.setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
-//                    train.checkAnswer(question.getId(), );
-                    }
                 }
+            }
 
-            });
+            @Override
+            public void updateSelected(boolean selected) {
+                super.updateSelected(selected);
+                if (selected) {
+                    setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
+                    getItem().setChecked();
+                    if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
+                        button.setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
+//                    train.checkAnswer(question.getId(), );
+                }
+            }
+        });
 
-            history.put(button.getText(), topicsListView.getCellFactory());
-        }
-        else
-            topicsListView.setCellFactory(history.get(button.getText()));
-            // TODO: Добавить сохранение выбора
+//            history.put(button.getText(), topicsListView);
+//        }
+//        else
+//            topicsListView=history.get(button.getText());
+        // TODO: Добавить сохранение выбора
         try {
             ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(question.getImage().getBytes()));
             Image img = new Image(bis);
@@ -175,6 +178,7 @@ public class NewTrainController extends BaseController {
         } catch (Exception ex) {
             imageView.setImage(null);
         }
+
     }
 
     @FXML
@@ -190,7 +194,7 @@ public class NewTrainController extends BaseController {
 
     public void nextQuestion(ActionEvent actionEvent) {
         currentQuestion++;
-        if (currentQuestion < training.getTicket().getQuestions().size())
+        if (currentQuestion <= training.getTicket().getQuestions().size())
             setQuestionForButton(training.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
 
     }

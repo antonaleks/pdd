@@ -1,5 +1,6 @@
 package org.antonaleks.pdd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,6 +15,16 @@ public class Option implements JsonSerializable {
     private String text;
     @JsonProperty("id")
     private int id;
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked() {
+        this.checked = true;
+    }
+
+    private boolean checked;
 
     public String getText() {
         return text;

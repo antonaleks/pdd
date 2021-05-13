@@ -61,7 +61,7 @@ public class SideMenuController {
         });
         Flow contentFlow = (Flow) context.getRegisteredObject("ContentFlow");
         bindNodeToController(trainByNum, TicketByNumberController.class, contentFlow, contentFlowHandler);
-        bindNodeToController(trainByTheme, MasonryPaneController.class, contentFlow, contentFlowHandler);
+        bindNodeToController(trainByTheme, TicketByTopicController.class, contentFlow, contentFlowHandler);
 
         bindNodeToController(exam, PopupController.class, contentFlow, contentFlowHandler);
 
