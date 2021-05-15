@@ -83,6 +83,8 @@ public final class MongoHelper {
         return list;
     }
 
+
+
     public <T extends JsonSerializable> List<T> getDocumentList(Class<T> classType, String collectionPath) {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
 

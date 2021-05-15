@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.antonaleks.pdd.entity.Option;
 import org.antonaleks.pdd.entity.Question;
+import org.antonaleks.pdd.entity.Topic;
 import org.antonaleks.pdd.model.Category;
 import org.antonaleks.pdd.model.Training;
 
@@ -50,12 +51,21 @@ public class NewTrainController extends BaseController {
     private List<JFXButton> buttons;
     private int currentQuestion;
     private Training training;
-    private HashMap<String, JFXListView> history;
-
 
     @FXML
     public void initialize(int numberTicket) throws IOException {
-        history = new HashMap<String, JFXListView>();
+        training = new Training(numberTicket, Category.AB);
+        setInitProps(training);
+    }
+
+    @FXML
+    public void initialize(Topic topic) throws IOException {
+        training = new Training(topic, Category.AB);
+        setInitProps(training);
+    }
+
+
+    public void setInitProps(Training training) throws IOException {
 
         alertButton.setOnAction(action -> {
             JFXAlert alert = new JFXAlert((Stage) alertButton.getScene().getWindow());
@@ -72,7 +82,7 @@ public class NewTrainController extends BaseController {
             alert.show();
         });
 
-        training = new Training(numberTicket, Category.AB);
+
         ArrayList<Node> children = new ArrayList<>();
         int i = 1;
         buttons = new ArrayList<JFXButton>();
@@ -134,7 +144,6 @@ public class NewTrainController extends BaseController {
         observableListQuestion.setAll(question.getOptions());
 
         topicsListView.setItems(observableListQuestion);
-
 
 
         topicsListView.setCellFactory(i -> new ListCell<Option>() {

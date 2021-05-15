@@ -68,7 +68,7 @@ public class TicketByNumberController extends BaseController {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-                loadModalWindow(e, "Тренировка", root);
+                loadModalWindow("Тренировка", root);
             });
 
 

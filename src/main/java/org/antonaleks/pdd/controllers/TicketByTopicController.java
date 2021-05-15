@@ -1,6 +1,7 @@
 package org.antonaleks.pdd.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXScrollPane;
 import io.datafx.controller.ViewController;
@@ -9,6 +10,10 @@ import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,6 +23,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.antonaleks.pdd.db.MongoHelper;
+import org.antonaleks.pdd.entity.Question;
+import org.antonaleks.pdd.entity.Topic;
+import org.antonaleks.pdd.model.Category;
+import org.antonaleks.pdd.utils.PropertiesManager;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -28,6 +38,7 @@ import java.util.List;
 public class TicketByTopicController extends BaseController {
     @FXML
     public VBox vboxPane;
+    public JFXListView topicsListView;
     @FXML
     private ScrollPane scrollPane;
 
@@ -37,57 +48,39 @@ public class TicketByTopicController extends BaseController {
 
     @PostConstruct
     public void init() {
-        vboxList = new ArrayList<VBox>();
-        for (int j = 0; j < 2; j++) {
+        List<Topic> topics = MongoHelper.getInstance().getDocumentList(Topic.class, PropertiesManager.getDbCollectionTopics());
+        ObservableList<Object> observableListQuestion = FXCollections.observableArrayList();
+        observableListQuestion.setAll(topics);
 
-            ArrayList<Node> children = new ArrayList<>();
-            for (int i = 1; i <= 40; i++) {
-                JFXButton button = new JFXButton();
+        topicsListView.setItems(observableListQuestion);
 
-                button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;");
-                button.setText("" + i);
+        topicsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Topic>() {
 
-                children.add(button);
+            @Override
+            public void changed(ObservableValue<? extends Topic> observable, Topic oldValue, Topic newValue) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                        "/fxml/newTrain.fxml"));
+                Parent root = null;
+                try {
+                    root = loader.load();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                NewTrainController dataController = loader.getController();
 
-                button.setOnAction(e -> {
-
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                            "/fxml/newTrain.fxml"));
-                    Parent root = null;
-                    try {
-                        root = loader.load();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                    NewTrainController dataController = loader.getController();
-
-                    try {
-                        dataController.initialize(Integer.parseInt(button.getText()));
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                    loadModalWindow(e, "Тренировка", root);
-                });
-
-
-//                Timeline animation = new Timeline(new KeyFrame(Duration.millis(240)));
-//                animation.setDelay(Duration.millis(100 * i + 1000));
-//                animation.play();
+                try {
+                    dataController.initialize(newValue);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                loadModalWindow("Тренировка", root);
             }
-            VBox vbox = new VBox();
-            vbox.getChildren().add(new Label("Hi"));
-            HBox hbox = new HBox();
-            JFXMasonryPane masonryPane = new JFXMasonryPane();
-            masonryPane.getChildren().addAll(children);
-            hbox.getChildren().addAll(masonryPane);
-            vbox.getChildren().add(masonryPane);
-            vboxList.add(vbox);
-        }
+        });
 
-        vboxPane.getChildren().addAll(vboxList);
+
+
         Platform.runLater(() -> scrollPane.requestLayout());
 
-//        scrollPane.setContent(vboxPane);
 
         JFXScrollPane.smoothScrolling(scrollPane);
 

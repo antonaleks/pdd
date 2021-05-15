@@ -7,12 +7,15 @@
 
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXListView?>
 <StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-    <VBox  spacing="10">
+    <VBox spacing="10">
 
         <Label styleClass="title-label" text="Вопросы">Flat Buttons</Label>
         <ScrollPane fitToWidth="true" fx:id="scrollPane" hbarPolicy="NEVER">
-            <VBox fx:id="vboxPane"></VBox>
+            <VBox fx:id="vboxPane">
+                <JFXListView fx:id="topicsListView"/>
+            </VBox>
         </ScrollPane>
     </VBox>
 </StackPane>

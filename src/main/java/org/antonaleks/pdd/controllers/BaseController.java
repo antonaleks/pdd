@@ -15,8 +15,8 @@ import javafx.stage.Stage;
 
 abstract class BaseController {
 
-    void loadModalWindow(ActionEvent actionEvent, String title, Parent root) {
-        javafx.stage.Window parentWindow = ((Node) actionEvent.getSource()).getScene().getWindow();
+    void loadModalWindow(String title, Parent root) {
+//        javafx.stage.Window parentWindow = ((Node) actionEvent.getSource()).getScene().getWindow();
         Stage stage = new Stage();
         JFXDecorator decorator = new JFXDecorator(stage, root);
         decorator.setCustomMaximize(true);
@@ -38,7 +38,7 @@ abstract class BaseController {
                 getClass().getResource("/css/jfoenix-main-demo.css").toExternalForm());
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(parentWindow);
+//        stage.initOwner(parentWindow);
         stage.setMinHeight(height);
         stage.setMinWidth(width);
         stage.show();
