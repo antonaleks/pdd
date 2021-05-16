@@ -13,16 +13,21 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import org.antonaleks.pdd.entity.Session;
 
 import javax.annotation.PostConstruct;
 
+import java.awt.*;
+
 import static io.datafx.controller.flow.container.ContainerAnimations.SWIPE_LEFT;
 
-@ViewController(value = "/fxml/Main.fxml", title = "PDD")
-public final class MainController {
+//@ViewController(value = "/fxml/Main.fxml", title = "PDD")
+public final class MainController extends BaseController {
 
+    public Label enterLabel;
     @FXMLViewFlowContext
     private ViewFlowContext context;
 
@@ -40,6 +45,8 @@ public final class MainController {
     private JFXRippler optionsRippler;
     @FXML
     private JFXDrawer drawer;
+    
+    
 
     private JFXPopup toolbarPopup;
 
@@ -48,6 +55,8 @@ public final class MainController {
      */
     @PostConstruct
     public void init() throws Exception {
+
+        enterLabel.setText(Session.getInstance().getCurrentUser() + " " + Session.getInstance().getCurrentCategory());
         // init the title hamburger icon
         final JFXTooltip burgerTooltip = new JFXTooltip("Open drawer");
 
@@ -76,11 +85,11 @@ public final class MainController {
         toolbarPopup = new JFXPopup(loader.load());
 
         optionsBurger.setOnMouseClicked(e ->
-            toolbarPopup.show(optionsBurger,
-                PopupVPosition.TOP,
-                PopupHPosition.RIGHT,
-                -12,
-                15));
+                toolbarPopup.show(optionsBurger,
+                        PopupVPosition.TOP,
+                        PopupHPosition.RIGHT,
+                        -12,
+                        15));
         JFXTooltip.setVisibleDuration(Duration.millis(3000));
         JFXTooltip.install(titleBurgerContainer, burgerTooltip, Pos.BOTTOM_CENTER);
 
@@ -100,8 +109,9 @@ public final class MainController {
         Flow sideMenuFlow = new Flow(SideMenuController.class);
         final FlowHandler sideMenuFlowHandler = sideMenuFlow.createHandler(context);
         drawer.setSidePane(sideMenuFlowHandler.start(new ExtendedAnimatedFlowContainer(containerAnimationDuration,
-            SWIPE_LEFT)));
+                SWIPE_LEFT)));
     }
+
 
     public static final class InputController {
         @FXML

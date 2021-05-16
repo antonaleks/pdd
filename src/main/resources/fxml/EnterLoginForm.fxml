@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+
+
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+
+            <JFXTextField alignment="CENTER" fx:id="loginField" labelFloat="true" promptText="Имя пользователя"/>
+
+            <JFXPasswordField fx:id="passwordField" labelFloat="true" promptText="Пароль"/>
+
+            <JFXComboBox fx:id="categoryBox" promptText="Выберите категорию"/>
+
+            <JFXButton fx:id="enterButton" text="Enter" onAction="#buttonEnter"/>
+        </VBox>
+    </center>
+</BorderPane>

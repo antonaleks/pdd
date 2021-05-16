@@ -6,7 +6,8 @@
 <?import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition?>
 <?import javafx.scene.control.Label?>
 <?import java.lang.String?>
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
+fx:controller="org.antonaleks.pdd.controllers.MainController">
     <!-- Header -->
     <BorderPane>
         <top>
@@ -20,7 +21,7 @@
                                 </JFXHamburger>
                             </StackPane>
                         </JFXRippler>
-                        <Label>Тестирование ПДД</Label>
+                        <Label fx:id="enterLabel"/>
                     </leftItems>
                     <rightItems>
                         <JFXRippler fx:id="optionsRippler" maskType="CIRCLE"

@@ -17,6 +17,12 @@ import java.util.Random;
 public class User implements JsonSerializable {
     @JsonProperty("login")
     private String login;
+
+    @Override
+    public String toString() {
+        return "Пользователь " + login;
+    }
+
     @JsonProperty("password")
     private String password;
 

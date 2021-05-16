@@ -15,4 +15,9 @@ public enum Category {
    public int getCategory() {
        return this.cat;
    }
+
+    @Override
+    public String toString() {
+        return "Категория " + this.name();
+    }
 }

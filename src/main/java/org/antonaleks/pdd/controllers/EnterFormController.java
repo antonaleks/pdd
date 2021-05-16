@@ -1,6 +1,7 @@
 package org.antonaleks.pdd.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTooltip;
 import io.datafx.controller.ViewController;
@@ -8,6 +9,7 @@ import io.datafx.controller.flow.Flow;
 import io.datafx.controller.flow.FlowHandler;
 import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.animation.Transition;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +20,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.antonaleks.pdd.db.MongoHelper;
+import org.antonaleks.pdd.entity.Session;
 import org.antonaleks.pdd.entity.User;
+import org.antonaleks.pdd.model.Category;
 import org.antonaleks.pdd.utils.PropertiesManager;
 
 import javax.annotation.PostConstruct;
@@ -27,17 +31,20 @@ import java.util.List;
 
 import static io.datafx.controller.flow.container.ContainerAnimations.SWIPE_LEFT;
 
-@ViewController(value = "/fxml/enterForm.fxml")
+@ViewController(value = "/fxml/EnterLoginForm.fxml")
 public class EnterFormController extends BaseController {
+    @FXML
     public JFXButton enterButton;
     @FXML
     private TextField loginField;
+    @FXML
+    public JFXComboBox<Category> categoryBox;
     @FXML
     private PasswordField passwordField;
 
     @PostConstruct
     public void init() throws Exception {
-
+        categoryBox.setItems(FXCollections.observableArrayList(Category.AB, Category.CD));
     }
 
     public void buttonEnter(ActionEvent actionEvent) throws IOException {
@@ -46,16 +53,28 @@ public class EnterFormController extends BaseController {
         User currentUser = userList.stream().filter(user -> user.equals(newUser)).findFirst().orElse(null);
 
         if (currentUser != null) {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainForm.fxml"));
-//            loadModalWindow(actionEvent, "Главное меню", root);
-//            openScene = new MainFormNewController();
+            Session.getInstance().init(currentUser, categoryBox.getValue());
 
-            Stage stage = (Stage) enterButton.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"));
+            Parent root = null;
             try {
-//                openScene.start(stage);
+                root = loader.load();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            MainController mainController = loader.getController();
+
+            try {
+                mainController.init();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            loadModalWindow("Тренировка", root);
+            Stage currentStage = (Stage) enterButton.getScene().getWindow();
+            currentStage.close();
+
         } else {
             loginField.getStyleClass().add("wrong-credentials");
             passwordField.getStyleClass().add("wrong-credentials");

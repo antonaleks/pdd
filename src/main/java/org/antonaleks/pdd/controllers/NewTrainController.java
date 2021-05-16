@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.antonaleks.pdd.entity.Option;
 import org.antonaleks.pdd.entity.Question;
+import org.antonaleks.pdd.entity.Session;
 import org.antonaleks.pdd.entity.Topic;
 import org.antonaleks.pdd.model.Category;
 import org.antonaleks.pdd.model.Training;
@@ -54,13 +55,13 @@ public class NewTrainController extends BaseController {
 
     @FXML
     public void initialize(int numberTicket) throws IOException {
-        training = new Training(numberTicket, Category.AB);
+        training = new Training(numberTicket, Session.getInstance().getCurrentCategory());
         setInitProps(training);
     }
 
     @FXML
     public void initialize(Topic topic) throws IOException {
-        training = new Training(topic, Category.AB);
+        training = new Training(topic,Session.getInstance().getCurrentCategory());
         setInitProps(training);
     }
 
