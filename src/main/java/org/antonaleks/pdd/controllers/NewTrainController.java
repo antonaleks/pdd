@@ -43,11 +43,10 @@ public class NewTrainController extends BaseController {
     public ImageView imageView;
     public StackPane buttonStackPane;
 
-    private static final int STARTTIME = 0;
     public Label timerLabel;
-    public JFXDialog dialog;
     public JFXButton alertButton;
     public JFXButton closeButton;
+    public Label textTip;
     private String currentTip;
     private List<JFXButton> buttons;
     private int currentQuestion;
@@ -61,7 +60,7 @@ public class NewTrainController extends BaseController {
 
     @FXML
     public void initialize(Topic topic) throws IOException {
-        training = new Training(topic,Session.getInstance().getCurrentCategory());
+        training = new Training(topic, Session.getInstance().getCurrentCategory());
         setInitProps(training);
     }
 
@@ -107,7 +106,7 @@ public class NewTrainController extends BaseController {
         AtomicInteger time = new AtomicInteger();
         Timeline timeline = new Timeline(
                 new KeyFrame(
-                        Duration.seconds(1), //1000 мс * 60 сек = 1 мин
+                        Duration.seconds(1),
                         ae -> {
                             time.getAndIncrement();
                             int seconds = time.get() % 60;
@@ -138,11 +137,13 @@ public class NewTrainController extends BaseController {
         currentTip = question.getComment();
 
         textQuestion.setText(question.getText());
-
+        textTip.setText("");
 
 //        if (!history.containsKey(button.getText())) {
         ObservableList<Object> observableListQuestion = FXCollections.observableArrayList();
         observableListQuestion.setAll(question.getOptions());
+        if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
+            button.setStyle("-fx-background-color:#8d9bd7;");
 
         topicsListView.setItems(observableListQuestion);
 
@@ -169,18 +170,16 @@ public class NewTrainController extends BaseController {
                 if (selected) {
                     setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
                     getItem().setChecked();
-                    if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
+                    if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red")) {
                         button.setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
-//                    train.checkAnswer(question.getId(), );
+                        if (!correct)
+                            textTip.setText(question.getComment());
+                        else nextQuestion();
+                    }
                 }
             }
         });
 
-//            history.put(button.getText(), topicsListView);
-//        }
-//        else
-//            topicsListView=history.get(button.getText());
-        // TODO: Добавить сохранение выбора
         try {
             ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(question.getImage().getBytes()));
             Image img = new Image(bis);
@@ -202,7 +201,7 @@ public class NewTrainController extends BaseController {
 
     }
 
-    public void nextQuestion(ActionEvent actionEvent) {
+    public void nextQuestion() {
         currentQuestion++;
         if (currentQuestion <= training.getTicket().getQuestions().size())
             setQuestionForButton(training.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
