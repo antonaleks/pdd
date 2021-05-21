@@ -1,9 +1,12 @@
+import org.antonaleks.pdd.model.Category;
+import org.antonaleks.pdd.model.Exam;
 import org.junit.jupiter.api.Test;
 
 public class ExamTest {
     @Test
     void testNewExam() {
-
+        Exam exam = new Exam(Category.AB);
+        exam.run();
     }
 
     @Test

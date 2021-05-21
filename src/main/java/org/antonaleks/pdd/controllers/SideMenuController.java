@@ -1,6 +1,6 @@
 package org.antonaleks.pdd.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXListView;
 import io.datafx.controller.ViewController;
 import io.datafx.controller.flow.Flow;
 import io.datafx.controller.flow.FlowException;
@@ -63,7 +63,7 @@ public class SideMenuController {
         bindNodeToController(trainByNum, TicketByNumberController.class, contentFlow, contentFlowHandler);
         bindNodeToController(trainByTheme, TicketByTopicController.class, contentFlow, contentFlowHandler);
 
-        bindNodeToController(exam, PopupController.class, contentFlow, contentFlowHandler);
+        bindNodeToController(exam, ConfigExamController.class, contentFlow, contentFlowHandler);
 
     }
 

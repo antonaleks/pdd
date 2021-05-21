@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -16,14 +19,16 @@ import org.antonaleks.pdd.entity.Ticket;
 import org.antonaleks.pdd.entity.Topic;
 import org.antonaleks.pdd.model.Category;
 import org.antonaleks.pdd.utils.PropertiesManager;
-import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
 import static com.mongodb.client.model.Filters.*;
@@ -84,7 +89,6 @@ public final class MongoHelper {
     }
 
 
-
     public <T extends JsonSerializable> List<T> getDocumentList(Class<T> classType, String collectionPath) {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
 
@@ -113,6 +117,20 @@ public final class MongoHelper {
     public Ticket getTicketByNumber(int number, Category cat) {
 
         return new Ticket(getQuestionList(and(Filters.eq("ticketNumber", number), eq("cat", cat.getCategory()))), number);
+
+    }
+
+    public Ticket getTicketForExam(Category cat) {
+        List<Question> questions = new ArrayList<>();
+
+        List<Integer> range = IntStream.range(1, 40).boxed()
+                .collect(Collectors.toCollection(ArrayList::new));
+        Collections.shuffle(range);
+
+        for (int blockNumber = 1; blockNumber <= 5; blockNumber++) {
+            questions.addAll(getQuestionList(and(Filters.eq("ticketNumber", range.get(blockNumber - 1)), eq("blockNumber", blockNumber), eq("cat", cat.getCategory()))));
+        }
+        return new Ticket(questions, 1);
 
     }
 

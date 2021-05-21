@@ -1,6 +1,8 @@
 package org.antonaleks.pdd.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXMasonryPane;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,16 +17,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.antonaleks.pdd.entity.Option;
 import org.antonaleks.pdd.entity.Question;
 import org.antonaleks.pdd.entity.Session;
-import org.antonaleks.pdd.entity.Topic;
-import org.antonaleks.pdd.model.Category;
-import org.antonaleks.pdd.model.Training;
-
+import org.antonaleks.pdd.model.Exam;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -33,7 +31,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 //@ViewController(value = "/fxml/Main.fxml", title = "PDD")
-public class NewTrainController extends BaseController {
+public class ExamController extends BaseController {
     @FXML
     public JFXListView topicsListView;
     @FXML
@@ -46,48 +44,23 @@ public class NewTrainController extends BaseController {
     public Label timerLabel;
     public JFXButton alertButton;
     public JFXButton closeButton;
-    public Label textTip;
-    private String currentTip;
     private List<JFXButton> buttons;
     private int currentQuestion;
-    private Training training;
+    private Exam exam;
 
     @FXML
-    public void initialize(int numberTicket) throws IOException {
-        training = new Training(numberTicket, Session.getInstance().getCurrentCategory());
-        setInitProps(training);
+    public void initialize() throws IOException {
+        exam = new Exam(Session.getInstance().getCurrentCategory());
+        setInitProps(exam);
     }
 
-    @FXML
-    public void initialize(Topic topic) throws IOException {
-        training = new Training(topic, Session.getInstance().getCurrentCategory());
-        setInitProps(training);
-    }
-
-
-    public void setInitProps(Training training) throws IOException {
-
-        alertButton.setOnAction(action -> {
-            JFXAlert alert = new JFXAlert((Stage) alertButton.getScene().getWindow());
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setOverlayClose(false);
-            JFXDialogLayout layout = new JFXDialogLayout();
-            layout.setHeading(new Label("Подсказка"));
-            layout.setBody(new Label(currentTip));
-            JFXButton closeButton = new JFXButton("Ок");
-            closeButton.getStyleClass().add("dialog-accept");
-            closeButton.setOnAction(event -> alert.hideWithAnimation());
-            layout.setActions(closeButton);
-            alert.setContent(layout);
-            alert.show();
-        });
-
+    public void setInitProps(Exam exam) throws IOException {
 
         ArrayList<Node> children = new ArrayList<>();
         int i = 1;
         buttons = new ArrayList<JFXButton>();
         for (Question question :
-                training.getTicket().getQuestions()) {
+                exam.getTicket().getQuestions()) {
             JFXButton button = new JFXButton();
             button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;");
             button.setText("" + i++);
@@ -101,7 +74,7 @@ public class NewTrainController extends BaseController {
         children.addAll(buttons);
         masonryPane.getChildren().addAll(children);
 
-        setQuestionForButton(training.getTicket().getQuestions().get(0), buttons.get(0));
+        setQuestionForButton(exam.getTicket().getQuestions().get(0), buttons.get(0));
 
         AtomicInteger time = new AtomicInteger();
         Timeline timeline = new Timeline(
@@ -134,13 +107,10 @@ public class NewTrainController extends BaseController {
 
     private void setQuestionForButton(Question question, JFXButton button) {
 
-        currentTip = question.getComment();
-
         textQuestion.setText(question.getText());
-        textTip.setText("");
 
-//        if (!history.containsKey(button.getText())) {
         ObservableList<Object> observableListQuestion = FXCollections.observableArrayList();
+        Collections.shuffle(question.getOptions());
         observableListQuestion.setAll(question.getOptions());
         if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
             button.setStyle("-fx-background-color:#8d9bd7;");
@@ -150,17 +120,19 @@ public class NewTrainController extends BaseController {
 
         topicsListView.setCellFactory(i -> new ListCell<Option>() {
             private boolean correct = false;
+            private String defaultStyle = getStyle();
 
             @Override
             public void updateItem(Option item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item != null) {
-                    Text text = new Text(item.toString());
+                    int id = getIndex() + 1;
+                    Text text = new Text("" + id + ". " + item);
                     text.setWrappingWidth(700);
                     correct = question.getRightOption() == item.getId();
                     setGraphic(text);
                     if (item.isChecked())
-                        setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
+                        setStyle("-fx-background-color: Blue;");
                 }
             }
 
@@ -168,16 +140,15 @@ public class NewTrainController extends BaseController {
             public void updateSelected(boolean selected) {
                 super.updateSelected(selected);
                 if (selected) {
-                    setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
+//                    setStyle("-fx-background-color: Blue;");
                     getItem().setChecked();
-                    if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red")) {
-                        button.setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
-                        if (!correct)
-                            textTip.setText(question.getComment());
-                        else nextQuestion();
-                    }
+                    //nextQuestion();
+                } else {
+                    setStyle(defaultStyle);
+                    getItem().setUnchecked();
                 }
             }
+
         });
 
         try {
@@ -203,8 +174,8 @@ public class NewTrainController extends BaseController {
 
     public void nextQuestion() {
         currentQuestion++;
-        if (currentQuestion <= training.getTicket().getQuestions().size())
-            setQuestionForButton(training.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
+        if (currentQuestion <= exam.getTicket().getQuestions().size())
+            setQuestionForButton(exam.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
 
     }
 }

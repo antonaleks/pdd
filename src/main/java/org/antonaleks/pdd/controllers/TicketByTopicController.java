@@ -48,14 +48,14 @@ public class TicketByTopicController extends BaseController {
             @Override
             public void changed(ObservableValue<? extends Topic> observable, Topic oldValue, Topic newValue) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                        "/fxml/NewTrain.fxml"));
+                        "/fxml/Train.fxml"));
                 Parent root = null;
                 try {
                     root = loader.load();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-                NewTrainController dataController = loader.getController();
+                TrainController dataController = loader.getController();
 
                 try {
                     dataController.initialize(newValue);

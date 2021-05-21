@@ -57,7 +57,7 @@ public class Topic implements JsonSerializable {
 
     @Override
     public String toString() {
-        return id + "." + " " + name;
+        return name;
     }
 
     public String toStringJson() {

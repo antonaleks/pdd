@@ -1,47 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXMasonryPane?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
-
-<?import javafx.scene.text.Text?>
-<?import com.jfoenix.controls.JFXTimePicker?>
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXDialogLayout?>
-<?import com.jfoenix.controls.JFXDialog?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.geometry.Insets?>
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.antonaleks.pdd.controllers.NewTrainController">
+            fx:controller="org.antonaleks.pdd.controllers.ExamController">
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
 
     </padding>
-
-
     <top>
         <VBox>
             <BorderPane>
-                <left>
-                    <Label fx:id="timerLabel">
-                    </Label>
-                </left>
-                <right>
-                    <JFXButton fx:id="alertButton"
-                               styleClass="dialog-trigger">Подсказка
-                    </JFXButton>
-                </right>
+                <center>
+                    <Label fx:id="timerLabel"/>
+                </center>
 
             </BorderPane>
             <StackPane fx:id="buttonStackPane" prefHeight="150">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
-
                 </padding>
                 <children>
                     <JFXMasonryPane fx:id="masonryPane"/>
@@ -54,10 +37,8 @@
             <StackPane minHeight="200">
                 <padding>
                     <Insets top="20" right="20" bottom="20" left="20"/>
-
                 </padding>
-                <ImageView fx:id="imageView"
-                           preserveRatio="true" fitHeight="200"/>
+                <ImageView fx:id="imageView" preserveRatio="true" fitHeight="200"/>
             </StackPane>
             <TextFlow>
                 <children>
@@ -66,11 +47,6 @@
             </TextFlow>
 
             <JFXListView fx:id="topicsListView" minHeight="100"/>
-            <TextFlow>
-                <children>
-                    <Label fx:id="textTip"  maxWidth="700" wrapText="true"/>
-                </children>
-            </TextFlow>
 
         </VBox>
     </center>
@@ -80,7 +56,7 @@
                 <JFXButton fx:id="closeButton" onAction="#terminateTraining"
                            buttonType="RAISED"
                            style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">Завершить
-                    тестирование
+                    экзамен
                 </JFXButton>
             </left>
             <right>

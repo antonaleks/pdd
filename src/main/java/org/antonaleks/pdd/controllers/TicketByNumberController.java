@@ -45,14 +45,14 @@ public class TicketByNumberController extends BaseController {
             button.setOnAction(e -> {
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                        "/fxml/NewTrain.fxml"));
+                        "/fxml/Train.fxml"));
                 Parent root = null;
                 try {
                     root = loader.load();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-                NewTrainController dataController = loader.getController();
+                TrainController dataController = loader.getController();
 
                 try {
                     dataController.initialize(Integer.parseInt(button.getText()));
