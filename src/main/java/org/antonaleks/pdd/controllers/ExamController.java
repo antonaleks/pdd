@@ -142,6 +142,7 @@ public class ExamController extends BaseController {
                 if (selected) {
 //                    setStyle("-fx-background-color: Blue;");
                     getItem().setChecked();
+                    button.setDisable(true);
                     //nextQuestion();
                 } else {
                     setStyle(defaultStyle);
@@ -174,8 +175,12 @@ public class ExamController extends BaseController {
 
     public void nextQuestion() {
         currentQuestion++;
-        if (currentQuestion <= exam.getTicket().getQuestions().size())
-            setQuestionForButton(exam.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
 
+        if (currentQuestion <= exam.getTicket().getQuestions().size()) {
+            if (buttons.get(currentQuestion - 1).isDisable())
+                nextQuestion();
+            else
+                setQuestionForButton(exam.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
+        }
     }
 }
