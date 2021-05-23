@@ -13,20 +13,16 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Filters;
-import org.antonaleks.pdd.entity.JsonSerializable;
-import org.antonaleks.pdd.entity.Question;
-import org.antonaleks.pdd.entity.Ticket;
-import org.antonaleks.pdd.entity.Topic;
+import com.mongodb.client.model.Projections;
+import org.antonaleks.pdd.entity.*;
 import org.antonaleks.pdd.model.Category;
 import org.antonaleks.pdd.utils.PropertiesManager;
+import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
@@ -108,6 +104,45 @@ public final class MongoHelper {
         return list;
     }
 
+    public List<User> getUserList(Bson filter, String... fields) {
+        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionUser());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MongoIterable coll = collection.find(filter).projection(Projections.include(fields)).map(x -> {
+            try {
+                return objectMapper.readValue(x.toJson(), User.class);
+            } catch (JsonProcessingException e) {
+                return null;
+            }
+        });
+
+
+        List<User> list = (List<User>) StreamSupport.stream(coll.spliterator(), true)
+                .collect(Collectors.toList());
+        return list;
+    }
+
+
+    public <T extends JsonSerializable> List<T> getDocumentList(Class<T> classType, String collectionPath, String filter, String fields) {
+        MongoCollection<Document> collection = database.getCollection(collectionPath);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MongoIterable coll = collection.find(new BsonDocument()).map(x -> {
+            try {
+                return objectMapper.readValue(x.toJson(), classType);
+            } catch (JsonProcessingException e) {
+                return null;
+            }
+        });
+
+
+        List<T> list = (List<T>) StreamSupport.stream(coll.spliterator(), true)
+                .collect(Collectors.toList());
+        return list;
+    }
+
     public List<Question> getQuestionListByTopic(Topic topic, Category cat) {
 
         return getQuestionList(and(elemMatch("topics", Filters.eq("id", topic.getId())), eq("cat", cat.getCategory())));
@@ -123,6 +158,7 @@ public final class MongoHelper {
     public Ticket getTicketForExam(Category cat) {
         List<Question> questions = new ArrayList<>();
 
+
         List<Integer> range = IntStream.range(1, 40).boxed()
                 .collect(Collectors.toCollection(ArrayList::new));
         Collections.shuffle(range);
@@ -130,6 +166,10 @@ public final class MongoHelper {
         for (int blockNumber = 1; blockNumber <= 5; blockNumber++) {
             questions.addAll(getQuestionList(and(Filters.eq("ticketNumber", range.get(blockNumber - 1)), eq("blockNumber", blockNumber), eq("cat", cat.getCategory()))));
         }
+
+        questions.addAll(getQuestionList(and(Filters.eq("ticketNumber", range.get(5)), eq("blockNumber", new Random().nextInt(6) + 1), eq("cat", cat.getCategory()))));
+        questions.addAll(getQuestionList(and(Filters.eq("ticketNumber", range.get(6)), eq("blockNumber", new Random().nextInt(6) + 1), eq("cat", cat.getCategory()))));
+
         return new Ticket(questions, 1);
 
     }
@@ -154,6 +194,25 @@ public final class MongoHelper {
                 .collect(Collectors.toList());
 
         collection.insertMany(documents);
+
+    }
+
+    public void updateUser(User user) throws IOException {
+        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionUser());
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("login", user.getLogin());
+        query.put("password", user.getPassword());
+
+        BasicDBObject newDocument = new BasicDBObject();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String questionAsString = objectMapper.writeValueAsString(user.getStatistic());
+        List<Document> docs = objectMapper.readValue(questionAsString, List.class);
+        newDocument.put("statistic", docs);
+
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", newDocument);
+        collection.updateOne(query, updateObject);
 
     }
 

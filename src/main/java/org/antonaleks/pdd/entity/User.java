@@ -2,16 +2,19 @@ package org.antonaleks.pdd.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.antonaleks.pdd.db.MongoHelper;
+import org.antonaleks.pdd.model.Statistic;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements JsonSerializable {
@@ -26,6 +29,24 @@ public class User implements JsonSerializable {
     @JsonProperty("password")
     private String password;
 
+    @JsonIgnoreProperties
+    public List<Statistic> getStatisticFromDB() {
+        List<User> userList = MongoHelper.getInstance().getUserList(and(eq("login", login), eq("password", password)));
+
+        User currentUser = userList.stream().filter(user -> user.equals(this)).findFirst().orElse(null);
+        if (!currentUser.statistic.isEmpty())
+            statistic = currentUser.statistic;
+        return statistic;
+    }
+
+    public List<Statistic> getStatistic() {
+
+        return statistic;
+    }
+
+
+    @JsonProperty("statistic")
+    private List<Statistic> statistic = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -61,10 +82,10 @@ public class User implements JsonSerializable {
     private Role role;
 
     public User() {
+
     }
 
     public User(String login, String password) {
-
         this.login = login;
         this.password = PasswordUtils.generateSecurePassword(password);
     }
@@ -75,6 +96,13 @@ public class User implements JsonSerializable {
         this.role = Role.valueOf(role);
     }
 
+
+    public void addStatistic(Statistic newStatistic) throws IOException {
+
+        statistic.add(newStatistic);
+        MongoHelper.getInstance().updateUser(this);
+
+    }
 }
 
 enum Role {
@@ -93,6 +121,7 @@ enum Role {
 //        return this.role;
 //    }
 }
+
 
 class PasswordUtils {
 
