@@ -1,4 +1,4 @@
-package org.antonaleks.pdd.model;
+package org.antonaleks.pdd.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleObjectProperty;
-import org.antonaleks.pdd.entity.Session;
+import org.antonaleks.pdd.model.Category;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -67,7 +67,7 @@ public class Statistic extends RecursiveTreeObject<Statistic> {
     @JsonIgnore
     public SimpleObjectProperty getDateExamProperty() {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date c = new Date(dateExam);
         String date = sdf.format(c);
         return new SimpleObjectProperty(date);

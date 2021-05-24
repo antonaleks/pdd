@@ -18,12 +18,15 @@
                 </center>
 
             </BorderPane>
-            <HBox>
-                <Label fx:id="userLabel"/>
-                <Label fx:id="examPassedLabel"/>
-                <Label fx:id="examNoFailLabel"/>
-                <Label fx:id="examFailLabel"/>
-
+            <HBox spacing="10">
+                <VBox>
+                    <Label fx:id="userLabel"/>
+                    <Label fx:id="examPassedLabel"/>
+                </VBox>
+                <VBox>
+                    <Label fx:id="examNoFailLabel"/>
+                    <Label fx:id="examFailLabel"/>
+                </VBox>
             </HBox>
         </VBox>
     </top>

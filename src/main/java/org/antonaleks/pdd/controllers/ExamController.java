@@ -20,8 +20,8 @@ import javafx.util.Duration;
 import org.antonaleks.pdd.entity.Option;
 import org.antonaleks.pdd.entity.Question;
 import org.antonaleks.pdd.entity.Session;
+import org.antonaleks.pdd.entity.Statistic;
 import org.antonaleks.pdd.model.Exam;
-import org.antonaleks.pdd.model.Statistic;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

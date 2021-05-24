@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <StackPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1"
            xmlns="http://javafx.com/javafx/2.2">
-    <BorderPane>
-        <center>
-            <VBox maxWidth="600" maxHeight="600" spacing="10">
-                <Label styleClass="title-label" text="Экзамен">Flat Buttons</Label>
-                <JFXButton fx:id="startButton" onAction="#startExam">Начать экзамен</JFXButton>
-            </VBox>
-        </center>
-    </BorderPane>
+    <VBox maxWidth="400" maxHeight="400" spacing="10" alignment="CENTER">
+
+        <JFXButton fx:id="startButton" onAction="#startExam" buttonType="RAISED"
+                   style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:32px;">Начать экзамен
+        </JFXButton>
+    </VBox>
+
 
 </StackPane>

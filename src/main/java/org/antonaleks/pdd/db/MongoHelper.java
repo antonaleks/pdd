@@ -8,10 +8,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoIterable;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import org.antonaleks.pdd.entity.*;
@@ -109,16 +106,21 @@ public final class MongoHelper {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        MongoIterable coll = collection.find(filter).projection(Projections.include(fields)).map(x -> {
+        FindIterable coll = collection.find(filter);
+        if (fields != null) {
+            coll = coll.projection(Projections.include(fields));
+        }
+
+        MongoIterable<User> collResult = coll.map(x -> {
             try {
-                return objectMapper.readValue(x.toJson(), User.class);
+                return objectMapper.readValue(((Document) x).toJson(), User.class);
             } catch (JsonProcessingException e) {
                 return null;
             }
         });
 
 
-        List<User> list = (List<User>) StreamSupport.stream(coll.spliterator(), true)
+        List<User> list = (List<User>) StreamSupport.stream(collResult.spliterator(), true)
                 .collect(Collectors.toList());
         return list;
     }
@@ -234,6 +236,14 @@ public final class MongoHelper {
         MongoCollection<Document> collection = database.getCollection(collectionPath);
 
         collection.deleteMany(new Document());
+
+
+    }
+
+    public void remove(String collectionPath, Bson filter) {
+        MongoCollection<Document> collection = database.getCollection(collectionPath);
+
+        collection.deleteOne(filter);
 
 
     }

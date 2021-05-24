@@ -1,6 +1,6 @@
 import org.antonaleks.pdd.db.MongoHelper;
+import org.antonaleks.pdd.entity.Statistic;
 import org.antonaleks.pdd.entity.User;
-import org.antonaleks.pdd.model.Statistic;
 import org.antonaleks.pdd.utils.PropertiesManager;
 import org.junit.jupiter.api.Test;
 
@@ -52,18 +52,18 @@ public class LoginTest {
 
         List<User> userList = new ArrayList<User>();
         userList.add(new User("admin", "admin", "ADMINS"));
-        userList.add(new User("user", "user", "Федоров", "Иван", "Иванович", "USERS"));
+//        userList.add(new User("user", "user", "Федоров", "Иван", "Иванович", "USERS"));
         MongoHelper.getInstance().<User>insertJsonMany(userList, PropertiesManager.getDbCollectionUser());
 
     }
 
     @Test
     void testNewUserWithStatistic() throws IOException {
-        MongoHelper.getInstance().removeAll(PropertiesManager.getDbCollectionUser());
+        //MongoHelper.getInstance().removeAll(PropertiesManager.getDbCollectionUser());
 
         List<User> userList = new ArrayList<User>();
         Statistic statistic = new Statistic(Timestamp.from(Instant.now()).getTime(), 2, 28, true);
-        User user = new User("user", "user", "Федоров", "Иван", "Иванович", "USERS");
+        User user = new User("test", "test", "Иванов", "Иван", "Иванович", "USERS");
         user.addStatistic(statistic);
         userList.add(user);
         MongoHelper.getInstance().<User>insertJsonMany(userList, PropertiesManager.getDbCollectionUser());

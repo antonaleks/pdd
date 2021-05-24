@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleObjectProperty;
 import org.antonaleks.pdd.db.MongoHelper;
-import org.antonaleks.pdd.model.Statistic;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -80,6 +79,8 @@ public class User extends RecursiveTreeObject<User> implements JsonSerializable 
         User currentUser = userList.stream().filter(user -> user.equals(this)).findFirst().orElse(null);
         if (!currentUser.statistic.isEmpty())
             statistic = currentUser.statistic;
+        else
+            statistic = new ArrayList<>();
         return statistic;
     }
 

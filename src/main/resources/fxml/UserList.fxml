@@ -37,4 +37,35 @@
 
         </children>
     </VBox>
+
+    <JFXDialog fx:id="dialog">
+        <JFXDialogLayout>
+            <heading>
+                <Label>Новый пользователь</Label>
+            </heading>
+            <body>
+                <VBox alignment="CENTER" spacing="40">
+
+                    <JFXTextField alignment="CENTER" fx:id="loginField" labelFloat="true"
+                                  promptText="Имя пользователя"/>
+
+                    <JFXPasswordField fx:id="passwordField" labelFloat="true" promptText="Пароль"/>
+
+                    <JFXTextField alignment="CENTER" fx:id="surnameField" labelFloat="true" promptText="Фамилия"/>
+
+                    <JFXTextField alignment="CENTER" fx:id="nameField" labelFloat="true" promptText="Имя"/>
+
+                    <JFXTextField alignment="CENTER" fx:id="patronymicField" labelFloat="true" promptText="Отчество"/>
+
+                </VBox>
+            </body>
+            <actions>
+                <JFXButton fx:id="cancelButton" styleClass="dialog-accept">Отмена
+                </JFXButton>
+                <JFXButton fx:id="acceptButton" styleClass="dialog-accept" onAction="#addUser">Добавить
+                </JFXButton>
+            </actions>
+        </JFXDialogLayout>
+    </JFXDialog>
 </StackPane>
+

@@ -12,8 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeTableColumn;
 import javafx.stage.Stage;
+import org.antonaleks.pdd.entity.Statistic;
 import org.antonaleks.pdd.entity.User;
-import org.antonaleks.pdd.model.Statistic;
 
 import java.io.IOException;
 import java.util.Date;
