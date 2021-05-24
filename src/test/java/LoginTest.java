@@ -17,7 +17,7 @@ public class LoginTest {
 
     @Test
     void testLoginPassword() {
-        User newUser = new User("user", "user", "USERS");
+        User newUser = new User("user", "user", "Иванов", "Иван", "Иванович", "USERS");
         List<User> userList = MongoHelper.getInstance().getDocumentList(User.class, PropertiesManager.getDbCollectionUser());
         User currentUser = userList.stream().filter(user -> user.equals(newUser)).findFirst().orElse(null);
         System.out.println(currentUser);
@@ -31,6 +31,7 @@ public class LoginTest {
         currentUser.getStatisticFromDB();
         Statistic statistic = new Statistic(Timestamp.from(Instant.now()).getTime(), 2, 28, true);
         currentUser.addStatistic(statistic);
+        currentUser.updateStatistic();
         currentUser.getStatisticFromDB();
 
         System.out.println(currentUser);
@@ -51,7 +52,7 @@ public class LoginTest {
 
         List<User> userList = new ArrayList<User>();
         userList.add(new User("admin", "admin", "ADMINS"));
-        userList.add(new User("user", "user", "USERS"));
+        userList.add(new User("user", "user", "Федоров", "Иван", "Иванович", "USERS"));
         MongoHelper.getInstance().<User>insertJsonMany(userList, PropertiesManager.getDbCollectionUser());
 
     }
@@ -62,7 +63,7 @@ public class LoginTest {
 
         List<User> userList = new ArrayList<User>();
         Statistic statistic = new Statistic(Timestamp.from(Instant.now()).getTime(), 2, 28, true);
-        User user = new User("test", "test", "USERS");
+        User user = new User("user", "user", "Федоров", "Иван", "Иванович", "USERS");
         user.addStatistic(statistic);
         userList.add(user);
         MongoHelper.getInstance().<User>insertJsonMany(userList, PropertiesManager.getDbCollectionUser());

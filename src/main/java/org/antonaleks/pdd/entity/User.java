@@ -1,7 +1,10 @@
 package org.antonaleks.pdd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.SimpleObjectProperty;
 import org.antonaleks.pdd.db.MongoHelper;
 import org.antonaleks.pdd.model.Statistic;
 
@@ -16,20 +19,61 @@ import java.util.*;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class User implements JsonSerializable {
+@JsonIgnoreProperties(value = {"children", "groupedColumn", "groupedValue"}, ignoreUnknown = true)
+public class User extends RecursiveTreeObject<User> implements JsonSerializable {
+
+    @JsonProperty("surname")
+    private String surname;
+
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("surname")
+    public String getSurname() {
+        return surname;
+    }
+
+    @JsonProperty("name")
+    public String getName() {
+        return name;
+    }
+
+    @JsonProperty("patronymic")
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    @JsonIgnore
+    public SimpleObjectProperty getSurnameProperty() {
+        return new SimpleObjectProperty(surname);
+    }
+
+    @JsonIgnore
+    public SimpleObjectProperty getNameProperty() {
+        return new SimpleObjectProperty(name);
+    }
+
+    @JsonIgnore
+    public SimpleObjectProperty getPatronymicProperty() {
+        return new SimpleObjectProperty(patronymic);
+    }
+
+    @JsonProperty("patronymic")
+    private String patronymic;
+
     @JsonProperty("login")
     private String login;
 
     @Override
     public String toString() {
-        return "Пользователь " + login;
+        return String.format("Пользователь: %s %s %s", surname, name, patronymic);
     }
 
     @JsonProperty("password")
     private String password;
 
-    @JsonIgnoreProperties
+
+    @JsonIgnore
     public List<Statistic> getStatisticFromDB() {
         List<User> userList = MongoHelper.getInstance().getUserList(and(eq("login", login), eq("password", password)));
 
@@ -85,23 +129,41 @@ public class User implements JsonSerializable {
 
     }
 
+
+    public User(String login, String password, String surname, String name, String patronymic) {
+        this.login = login;
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.password = PasswordUtils.generateSecurePassword(password);
+    }
+
     public User(String login, String password) {
         this.login = login;
         this.password = PasswordUtils.generateSecurePassword(password);
     }
 
     public User(String login, String password, String role) {
-        this(login, password);
+        this(login, password, "", "", "");
+
+        this.role = Role.valueOf(role);
+    }
+
+    public User(String login, String password, String surname, String name, String patronymic, String role) {
+        this(login, password, surname, name, patronymic);
 
         this.role = Role.valueOf(role);
     }
 
 
-    public void addStatistic(Statistic newStatistic) throws IOException {
+    public void addStatistic(Statistic newStatistic) {
 
         statistic.add(newStatistic);
-        MongoHelper.getInstance().updateUser(this);
 
+    }
+
+    public void updateStatistic() throws IOException {
+        MongoHelper.getInstance().updateUser(this);
     }
 }
 

@@ -3,13 +3,17 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-    <center>
-        <VBox spacing="10">
+<StackPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1"
+           xmlns="http://javafx.com/javafx/2.2">
+    <BorderPane>
+        <center>
+            <VBox maxWidth="600" maxHeight="600" spacing="10">
+                <Label styleClass="title-label" text="Экзамен">Flat Buttons</Label>
+                <JFXButton fx:id="startButton" onAction="#startExam">Начать экзамен</JFXButton>
+            </VBox>
+        </center>
+    </BorderPane>
 
-            <Label styleClass="title-label" text="Экзамен">Flat Buttons</Label>
-            <JFXButton fx:id="startButton" onAction="#startExam">Начать экзамен</JFXButton>
-        </VBox>
-    </center>
-</BorderPane>
+</StackPane>

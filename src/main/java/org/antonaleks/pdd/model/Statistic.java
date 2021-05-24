@@ -1,14 +1,20 @@
 package org.antonaleks.pdd.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.SimpleObjectProperty;
 import org.antonaleks.pdd.entity.Session;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 class MongoTimestampConverter extends JsonDeserializer<Long> {
 
@@ -19,7 +25,8 @@ class MongoTimestampConverter extends JsonDeserializer<Long> {
     }
 }
 
-public class Statistic {
+@JsonIgnoreProperties(value = {"children", "groupedColumn", "groupedValue"}, ignoreUnknown = true)
+public class Statistic extends RecursiveTreeObject<Statistic> {
     @JsonProperty("dateExam")
     @JsonDeserialize(using = MongoTimestampConverter.class)
     private long dateExam;
@@ -56,6 +63,30 @@ public class Statistic {
 
     @JsonProperty("category")
     private int category;
+
+    @JsonIgnore
+    public SimpleObjectProperty getDateExamProperty() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        Date c = new Date(dateExam);
+        String date = sdf.format(c);
+        return new SimpleObjectProperty(date);
+    }
+
+    @JsonIgnore
+    public SimpleObjectProperty getMistakesCountProperty() {
+        return new SimpleObjectProperty(mistakesCount);
+    }
+
+    @JsonIgnore
+    public SimpleObjectProperty getRightCountProperty() {
+        return new SimpleObjectProperty(rightCount);
+    }
+
+    @JsonIgnore
+    public SimpleObjectProperty isExamIsPassedProperty() {
+        return new SimpleObjectProperty(examIsPassed ? "Сдан" : " Не сдан");
+    }
 
     public Statistic(long dateExam, int mistakesCount, int rightCount, boolean examIsPassed, Category category) {
         this.dateExam = dateExam;

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.antonaleks.pdd.controllers.StatisticController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+
+    </padding>
+    <top>
+        <VBox>
+            <BorderPane>
+                <center>
+                    <Label fx:id="timerLabel" text="Статистика пользователя"/>
+                </center>
+
+            </BorderPane>
+            <HBox>
+                <Label fx:id="userLabel"/>
+                <Label fx:id="examPassedLabel"/>
+                <Label fx:id="examNoFailLabel"/>
+                <Label fx:id="examFailLabel"/>
+
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <JFXTreeTableView fx:id="treeTableView">
+            <columns>
+                <JFXTreeTableColumn fx:id="dateColumn"
+                                    text="Дата"
+                />
+                <JFXTreeTableColumn fx:id="countMistakesColumn" text="Количество ошибок"
+                />
+                <JFXTreeTableColumn fx:id="rightCountColumn" text="Количество правильных ответов"
+                />
+                <JFXTreeTableColumn fx:id="resultColumn" text="Результат экзамена"
+                />
+            </columns>
+        </JFXTreeTableView>
+    </center>
+    <bottom>
+        <BorderPane>
+            <right>
+                <JFXButton fx:id="closeButton" onAction="#closeWindow"
+                           buttonType="RAISED"
+                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">Закрыть
+                    статистику
+                </JFXButton>
+            </right>
+        </BorderPane>
+    </bottom>
+
+
+</BorderPane>

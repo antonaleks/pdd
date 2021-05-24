@@ -127,12 +127,12 @@ public class ExamController extends BaseController {
     }
 
     private boolean finishExam() throws IOException {
-        int count = (int) exam.getTicket().getQuestions().stream().filter(item ->
+        int count = (int) exam.getTicket().getQuestions().subList(0, buttons.size()).stream().filter(item ->
                 item.getRightOption() != (item.getOptions().stream().filter(Option::isChecked).findAny().orElse(new Option()).getId())).count();
 
-        Scanner in = new Scanner(System.in);
-
-        count = in.nextInt();
+//        Scanner in = new Scanner(System.in);
+//
+//        count = in.nextInt();
         int examPassed = -1;
         if (count == 0)
             examPassed = 1;
@@ -156,6 +156,7 @@ public class ExamController extends BaseController {
         if (examPassed != -1) {
             Statistic statistic = new Statistic(Timestamp.from(Instant.now()).getTime(), count, buttons.size() - count, examPassed == 1);
             Session.getInstance().getCurrentUser().addStatistic(statistic);
+            Session.getInstance().getCurrentUser().updateStatistic();
             showDialog(String.format(examPassed == 1 ? EXAM_PASSED : EXAM_NOT_PASSED, count), true);
         }
         return false;

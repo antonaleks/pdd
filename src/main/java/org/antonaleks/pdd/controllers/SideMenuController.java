@@ -35,7 +35,15 @@ public class SideMenuController {
     private Label exam;
 
     @FXML
+    @ActionTrigger("statistic")
+    private Label statistic;
+    @FXML
+    @ActionTrigger("newUser")
+    private Label newUser;
+
+    @FXML
     private JFXListView<Label> sideList;
+
     /**
      * init fxml when loaded.
      */
@@ -64,6 +72,7 @@ public class SideMenuController {
         bindNodeToController(trainByTheme, TicketByTopicController.class, contentFlow, contentFlowHandler);
 
         bindNodeToController(exam, ConfigExamController.class, contentFlow, contentFlowHandler);
+        bindNodeToController(statistic, UserListController.class, contentFlow, contentFlowHandler);
 
     }
 
