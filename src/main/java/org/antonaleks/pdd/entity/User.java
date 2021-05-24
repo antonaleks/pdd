@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleObjectProperty;
 import org.antonaleks.pdd.db.MongoHelper;
+import org.antonaleks.pdd.model.Role;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -168,22 +169,7 @@ public class User extends RecursiveTreeObject<User> implements JsonSerializable 
     }
 }
 
-enum Role {
 
-    ADMINS,
-    USERS,
-    ;
-//
-//    Role(String role) {
-//        this.role = role;
-//    }
-//
-//    private final String role;
-//
-//    public String getRole() {
-//        return this.role;
-//    }
-}
 
 
 class PasswordUtils {

@@ -116,6 +116,8 @@ public class UserListController extends BaseController {
                 .bind(Bindings.notEqual(-1, treeTableView.getSelectionModel().selectedIndexProperty()));
         treeTableViewRemove.disableProperty()
                 .bind(Bindings.equal(-1, treeTableView.getSelectionModel().selectedIndexProperty()));
+        statisticButton.disableProperty()
+                .bind(Bindings.equal(-1, treeTableView.getSelectionModel().selectedIndexProperty()));
         treeTableViewAdd.setOnMouseClicked((e) -> {
             System.out.println("add");
             showDialog();
@@ -182,24 +184,24 @@ public class UserListController extends BaseController {
     @FXML
     private void openStatistic() {
         User selectedUser = treeTableView.getSelectionModel().getSelectedItem().getValue();
-//        if (!selectedUser.getStatistic().isEmpty()) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "/fxml/Statistic.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-        StatisticController dataController = loader.getController();
+        if (selectedUser != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/fxml/Statistic.fxml"));
+            Parent root = null;
+            try {
+                root = loader.load();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            StatisticController dataController = loader.getController();
 
-        try {
-            dataController.initialize(selectedUser);
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+            try {
+                dataController.initialize(selectedUser);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            loadModalWindow("Тренировка", root);
         }
-        loadModalWindow("Тренировка", root);
-//        }
     }
 
 

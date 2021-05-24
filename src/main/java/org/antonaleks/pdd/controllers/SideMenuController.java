@@ -13,6 +13,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import org.antonaleks.pdd.entity.Session;
+import org.antonaleks.pdd.model.Role;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -49,12 +51,14 @@ public class SideMenuController {
      */
     @PostConstruct
     public void init() throws IOException {
+
+
         Objects.requireNonNull(context, "context");
         FlowHandler contentFlowHandler = (FlowHandler) context.getRegisteredObject("ContentFlowHandler");
         sideList.propagateMouseEventsToParent();
         sideList.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
-            new Thread(()->{
-                Platform.runLater(()->{
+            new Thread(() -> {
+                Platform.runLater(() -> {
                     if (newVal != null) {
                         try {
                             contentFlowHandler.handle(newVal.getId());
@@ -72,6 +76,9 @@ public class SideMenuController {
         bindNodeToController(trainByTheme, TicketByTopicController.class, contentFlow, contentFlowHandler);
 
         bindNodeToController(exam, ConfigExamController.class, contentFlow, contentFlowHandler);
+        if (Session.getInstance().getCurrentUser().getRole() == Role.USERS) {
+            sideList.getItems().remove(statistic);
+        }
         bindNodeToController(statistic, UserListController.class, contentFlow, contentFlowHandler);
 
     }

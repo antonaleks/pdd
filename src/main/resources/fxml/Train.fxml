@@ -28,7 +28,7 @@
                 </right>
 
             </BorderPane>
-            <StackPane fx:id="buttonStackPane" prefHeight="150">
+            <StackPane fx:id="buttonStackPane" prefHeight="230">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
 
