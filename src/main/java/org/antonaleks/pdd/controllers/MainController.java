@@ -3,7 +3,6 @@ package org.antonaleks.pdd.controllers;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.JFXPopup.PopupHPosition;
 import com.jfoenix.controls.JFXPopup.PopupVPosition;
-import io.datafx.controller.ViewController;
 import io.datafx.controller.flow.Flow;
 import io.datafx.controller.flow.FlowHandler;
 import io.datafx.controller.flow.context.FXMLViewFlowContext;
@@ -19,8 +18,6 @@ import javafx.util.Duration;
 import org.antonaleks.pdd.entity.Session;
 
 import javax.annotation.PostConstruct;
-
-import java.awt.*;
 
 import static io.datafx.controller.flow.container.ContainerAnimations.SWIPE_LEFT;
 
@@ -105,7 +102,6 @@ public final class MainController extends BaseController {
         drawer.setContent(flowHandler.start(new ExtendedAnimatedFlowContainer(containerAnimationDuration, SWIPE_LEFT)));
         context.register("ContentPane", drawer.getContent().get(0));
 
-        // side controller will add links to the content flow
         Flow sideMenuFlow = new Flow(SideMenuController.class);
         final FlowHandler sideMenuFlowHandler = sideMenuFlow.createHandler(context);
         drawer.setSidePane(sideMenuFlowHandler.start(new ExtendedAnimatedFlowContainer(containerAnimationDuration,
@@ -116,8 +112,7 @@ public final class MainController extends BaseController {
     public static final class InputController {
         @FXML
         private JFXListView<?> toolbarPopupList;
-
-        // close application
+        // TODO: add logout
         @FXML
         private void submit() {
             if (toolbarPopupList.getSelectionModel().getSelectedIndex() == 1) {

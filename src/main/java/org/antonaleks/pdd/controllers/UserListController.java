@@ -109,11 +109,6 @@ public class UserListController extends BaseController {
         treeTableView.setRoot(new RecursiveTreeItem<>(dummyData, RecursiveTreeObject::getChildren));
 
         treeTableView.setShowRoot(false);
-        treeTableViewCount.textProperty()
-                .bind(Bindings.createStringBinding(() -> PREFIX + treeTableView.getCurrentItemsCount() + POSTFIX,
-                        treeTableView.currentItemsCountProperty()));
-        treeTableViewAdd.disableProperty()
-                .bind(Bindings.notEqual(-1, treeTableView.getSelectionModel().selectedIndexProperty()));
         treeTableViewRemove.disableProperty()
                 .bind(Bindings.equal(-1, treeTableView.getSelectionModel().selectedIndexProperty()));
         statisticButton.disableProperty()

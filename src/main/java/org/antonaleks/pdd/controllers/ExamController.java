@@ -34,9 +34,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 //@ViewController(value = "/fxml/Main.fxml", title = "PDD")
 public class ExamController extends BaseController {
     public static final int TIME_EXAM_LIMIT = 20 * 60;
-    public static final String EXAM_PASSED = "Экзамен сдан, %s ошибок";
+    public static final String EXAM_PASSED = "Экзамен сдан, %s ошибок\nОставшееся время: %s";
     public static final String EXAM_CONTINUE = "Получено %s ошибок, добавлены вопросы";
-    public static final String EXAM_NOT_PASSED = "Экзамен не сдан, ошибок: %s";
+    public static final String EXAM_NOT_PASSED = "Экзамен не сдан, ошибок: %s\nОставшееся время: %s";
     private static final int FIVE_MINUTES = 60 * 5;
     @FXML
     public JFXListView topicsListView;
@@ -130,9 +130,6 @@ public class ExamController extends BaseController {
         int count = (int) exam.getTicket().getQuestions().subList(0, buttons.size()).stream().filter(item ->
                 item.getRightOption() != (item.getOptions().stream().filter(Option::isChecked).findAny().orElse(new Option()).getId())).count();
 
-//        Scanner in = new Scanner(System.in);
-//
-//        count = in.nextInt();
         int examPassed = -1;
         if (count == 0)
             examPassed = 1;
@@ -157,7 +154,7 @@ public class ExamController extends BaseController {
             Statistic statistic = new Statistic(Timestamp.from(Instant.now()).getTime(), count, buttons.size() - count, examPassed == 1);
             Session.getInstance().getCurrentUser().addStatistic(statistic);
             Session.getInstance().getCurrentUser().updateStatistic();
-            showDialog(String.format(examPassed == 1 ? EXAM_PASSED : EXAM_NOT_PASSED, count), true);
+            showDialog(String.format(examPassed == 1 ? EXAM_PASSED : EXAM_NOT_PASSED, count, timerLabel.getText()), true);
         }
         return false;
 
@@ -187,6 +184,7 @@ public class ExamController extends BaseController {
     private void setQuestionForButton(Question question, JFXButton button) {
 
         textQuestion.setText(question.getText());
+
 
         ObservableList<Option> observableListQuestion = FXCollections.observableArrayList();
         Collections.shuffle(question.getOptions());
@@ -219,15 +217,11 @@ public class ExamController extends BaseController {
             public void updateSelected(boolean selected) {
                 super.updateSelected(selected);
                 if (selected) {
-//                    setStyle("-fx-background-color: Blue;");
                     getItem().setChecked();
                     button.setDisable(true);
-                    //nextQuestion();
+
                 }
-//                else {
-//                    setStyle(defaultStyle);
-//                    getItem().setUnchecked();
-//                }
+
             }
 
         });

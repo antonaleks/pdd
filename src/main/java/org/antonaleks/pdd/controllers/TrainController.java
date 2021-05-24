@@ -87,7 +87,9 @@ public class TrainController extends BaseController {
         for (Question question :
                 training.getTicket().getQuestions()) {
             JFXButton button = new JFXButton();
-            button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;");
+            button.setButtonType(JFXButton.ButtonType.RAISED);
+            button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;");
+
             button.setText("" + i++);
             button.setOnMouseClicked(e -> {
                 currentQuestion = Integer.parseInt(button.getText());
@@ -128,6 +130,26 @@ public class TrainController extends BaseController {
         currentQuestion = 1;
 
 
+    }
+
+    private void showDialog(String body) {
+        JFXAlert alert = new JFXAlert((Stage) closeButton.getScene().getWindow());
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setOverlayClose(false);
+        JFXDialogLayout layout = new JFXDialogLayout();
+        layout.setHeading(new Label("Тренировка"));
+        layout.setBody(new Label(body));
+        JFXButton closeDialogButton = new JFXButton("Ок");
+        closeDialogButton.getStyleClass().add("dialog-accept");
+        closeDialogButton.setOnAction(event -> {
+            alert.hideWithAnimation();
+            Stage stage = (Stage) this.closeButton.getScene().getWindow();
+            stage.close();
+
+        });
+        layout.setActions(closeDialogButton);
+        alert.setContent(layout);
+        alert.show();
     }
 
     private void setQuestionForButton(Question question, JFXButton button) {
@@ -191,8 +213,9 @@ public class TrainController extends BaseController {
 
     @FXML
     public void terminateTraining(ActionEvent event) {
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
+        int count = (int) training.getTicket().getQuestions().stream().filter(item ->
+                item.getRightOption() != (item.getOptions().stream().filter(Option::isChecked).findAny().orElse(new Option()).getId())).count();
+        showDialog(String.format("Допущено ошибок: %s\nВремя: %s", count, timerLabel.getText()));
     }
 
     public void start(Stage window, int number) throws Exception {

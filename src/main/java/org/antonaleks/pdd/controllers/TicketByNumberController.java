@@ -38,9 +38,13 @@ public class TicketByNumberController extends BaseController {
             JFXButton button = new JFXButton();
 
             button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;");
+            button.setButtonType(JFXButton.ButtonType.RAISED);
             button.setText("" + i);
+            button.setPrefSize(50, 50);
+
 
             children.add(button);
+
 
             button.setOnAction(e -> {
 

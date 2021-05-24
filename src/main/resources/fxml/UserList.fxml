@@ -9,9 +9,8 @@
         <children>
             <HBox alignment="CENTER">
                 <Label styleClass="title-label">Пользователи системы</Label>
-                <Label styleClass="title-label" fx:id="treeTableViewCount" minWidth="80"></Label>
-                <JFXButton fx:id="treeTableViewAdd" buttonType="FLAT" text="+"/>
-                <JFXButton fx:id="treeTableViewRemove" buttonType="FLAT" text="-"/>
+                <JFXButton fx:id="treeTableViewAdd" buttonType="FLAT" text="Добавить"/>
+                <JFXButton fx:id="treeTableViewRemove" buttonType="FLAT" text="Удалить"/>
                 <StackPane HBox.hgrow="ALWAYS">
                     <StackPane StackPane.alignment="CENTER_RIGHT" maxWidth="200">
                         <JFXTextField fx:id="searchField" promptText="Поиск..."></JFXTextField>

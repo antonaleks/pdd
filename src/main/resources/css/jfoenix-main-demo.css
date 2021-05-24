@@ -7,9 +7,14 @@
     -fx-font-smoothing-type: gray;
 }
 
+.wrong-credentials {
+    -jfx-unfocus-color: -fx-red;
+    -jfx-focus-color: -fx-red;
+}
+
 .side-menu {
     -fx-padding: 20.0, 10.0;
-    -fx-font-size: 15.0;
+    -fx-font-size: 14.0;
     -fx-font-weight: NORMAL;
     -fx-text-fill: #444;
 }

@@ -67,7 +67,7 @@ public class Statistic extends RecursiveTreeObject<Statistic> {
     @JsonIgnore
     public SimpleObjectProperty getDateExamProperty() {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         Date c = new Date(dateExam);
         String date = sdf.format(c);
         return new SimpleObjectProperty(date);
