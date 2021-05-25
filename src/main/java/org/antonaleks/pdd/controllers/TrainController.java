@@ -14,7 +14,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -163,25 +162,26 @@ public class TrainController extends BaseController {
         Collections.shuffle(question.getOptions());
         observableListQuestion.setAll(question.getOptions());
         if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
-            button.setStyle("-fx-background-color:#8d9bd7;");
+            button.setStyle("-fx-background-color:#8d9bd7;-fx-text-fill:WHITE;");
 
         topicsListView.setItems(observableListQuestion);
 
 
         topicsListView.setCellFactory(i -> new ListCell<Option>() {
             private boolean correct = false;
-
             @Override
             public void updateItem(Option item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item != null) {
                     int id = getIndex() + 1;
-                    Text text = new Text("" + id + ". " + item);
-                    text.setWrappingWidth(700);
                     correct = question.getRightOption() == item.getId();
-                    setGraphic(text);
-                    if (item.isChecked())
-                        setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
+                    setText("" + id + ". " + item);
+                    setWrapText(true);
+                    setPrefWidth(300);
+
+                    if (item.isChecked()) {
+                        setStyle((correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;") + "-fx-text-fill: WHITE");
+                    }
                 }
             }
 
@@ -189,10 +189,11 @@ public class TrainController extends BaseController {
             public void updateSelected(boolean selected) {
                 super.updateSelected(selected);
                 if (selected) {
-                    setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
+                    setStyle((correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;") + "-fx-text-fill: WHITE");
+
                     getItem().setChecked();
                     if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red")) {
-                        button.setStyle(correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;");
+                        button.setStyle((correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;") + "-fx-text-fill: WHITE");
                         if (!correct)
                             textTip.setText(question.getComment());
                         else nextQuestion();

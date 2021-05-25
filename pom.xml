@@ -6,11 +6,15 @@
 
     <groupId>org.example</groupId>
     <artifactId>backend-fx</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
+    <name>Экзамен ПДД</name>
+
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <resources>src/main/resources</resources>
+
     </properties>
     <dependencies>
 
@@ -80,16 +84,74 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.antonaleks.pdd.MainLogin</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <!--                            <descriptors>-->
+                            <!--                                <descriptor>assembly.xml</descriptor>-->
+                            <!--                            </descriptors>-->
+                            <archive>
+                                <manifest>
+                                    <mainClass>org.antonaleks.pdd.MainLogin</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <finalName>${name}-${version}</finalName>
+
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>2.1.1</version>
+                <executions>
+                    <execution>
+                        <id>l4j-clui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <jar>${project.build.directory}/${name}-${version}-jar-with-dependencies.jar</jar>
+
+                            <outfile>${project.build.directory}/${name}.exe</outfile>
+                            <classPath>
+                                <mainClass>org.antonaleks.pdd.MainLogin</mainClass>
+                                <preCp>anything</preCp>
+                            </classPath>
+                            <icon>${resources}/car.ico</icon>
+                            <jre>
+                                <minVersion>1.8.0</minVersion>
+                                <jdkPreference>preferJre</jdkPreference>
+                                <bundledJre64Bit>false</bundledJre64Bit>
+                                <runtimeBits>64/32</runtimeBits>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>1.0.0.0</fileVersion>
+                                <txtFileVersion>${project.version}</txtFileVersion>
+                                <fileDescription>${project.name}</fileDescription>
+                                <copyright>2021 alekseev.ap605@gmail.com</copyright>
+                                <productVersion>1.0.0.2</productVersion>
+                                <txtProductVersion>1.0.0.0</txtProductVersion>
+                                <productName>${project.name}</productName>
+                                <companyName>antonaleks</companyName>
+                                <internalName>Anton</internalName>
+                                <originalFilename>${name}.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
