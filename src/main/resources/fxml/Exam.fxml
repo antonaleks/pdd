@@ -46,7 +46,7 @@
                 </children>
             </TextFlow>
 
-            <JFXListView fx:id="topicsListView" minHeight="150"/>
+            <JFXListView fx:id="topicsListView" minHeight="120"/>
 
         </VBox>
     </center>

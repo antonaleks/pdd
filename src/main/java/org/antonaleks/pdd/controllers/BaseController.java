@@ -25,8 +25,8 @@ abstract class BaseController {
         double height = 800;
         try {
             Rectangle2D bounds = Screen.getScreens().get(0).getBounds();
-            width = bounds.getWidth() / 2.3;
-            height = bounds.getHeight() / 1.2;
+            width = bounds.getWidth() / 1.2;
+            height = bounds.getHeight() / 1.1;
         }catch (Exception e){ }
 
         Scene scene = new Scene(decorator, width, height);

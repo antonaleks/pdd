@@ -55,7 +55,7 @@
                 </children>
             </TextFlow>
 
-            <JFXListView fx:id="topicsListView" minHeight="150"/>
+            <JFXListView fx:id="topicsListView" minHeight="120"/>
             <TextFlow>
                 <children>
                     <Label fx:id="textTip"  maxWidth="700" wrapText="true"/>

@@ -9,7 +9,7 @@
     <VBox spacing="10">
 
         <Label styleClass="title-label" text="Вопросы по темам">Flat Buttons</Label>
-        <ScrollPane fitToWidth="true" fx:id="scrollPane" hbarPolicy="NEVER">
+        <ScrollPane fitToWidth="true" fx:id="scrollPane" hbarPolicy="NEVER" vbarPolicy="NEVER">
             <VBox fx:id="vboxPane">
                 <JFXListView fx:id="topicsListView" minHeight="600"/>
             </VBox>
