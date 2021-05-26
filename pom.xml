@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>backend-fx</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <name>Экзамен ПДД</name>
 
 
@@ -125,7 +125,7 @@
                             <headerType>gui</headerType>
                             <jar>${project.build.directory}/${name}-${version}-jar-with-dependencies.jar</jar>
 
-                            <outfile>${project.build.directory}/${name}.exe</outfile>
+                            <outfile>${project.build.directory}/${name}-${version}.exe</outfile>
                             <classPath>
                                 <mainClass>org.antonaleks.pdd.MainLogin</mainClass>
                                 <preCp>anything</preCp>
@@ -147,7 +147,7 @@
                                 <productName>${project.name}</productName>
                                 <companyName>antonaleks</companyName>
                                 <internalName>Anton</internalName>
-                                <originalFilename>${name}.exe</originalFilename>
+                                <originalFilename>${name}-${version}.exe</originalFilename>
                             </versionInfo>
                         </configuration>
                     </execution>

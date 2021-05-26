@@ -18,6 +18,14 @@ public class PropertiesManager {
     private static final String dbPort;
     private static final String dbName;
     private static final String dbCollectionTopics;
+    public static final String FOCUS_COLOR = "#8d9bd7";
+    public static final String DEFAULT_TEXT_COLOR = "WHITE";
+    public static final String RIGHT_BUTTON_COLOR = "Green";
+    public static final String FAIL_BUTTON_COLOR = "Red";
+    public static final String CHECKED_EXAM_BUTTON_COLOR = "Blue";
+
+    public static final String PASSIVE_COLOR = "#5264AE";
+
 
     public static String getDbCollectionTopics() {
         return dbCollectionTopics;

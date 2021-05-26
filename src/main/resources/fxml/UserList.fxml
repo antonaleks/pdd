@@ -20,12 +20,16 @@
             <JFXTreeTableView fx:id="treeTableView">
                 <columns>
                     <JFXTreeTableColumn fx:id="firstNameColumn"
-                                        minWidth="133" text="Имя" prefWidth="133"
-                                        resizable="false"/>
+                                        text="Имя"
+                    />
                     <JFXTreeTableColumn fx:id="lastNameColumn" text="Фамилия"
-                                        minWidth="133" resizable="false"/>
+                    />
                     <JFXTreeTableColumn fx:id="patronymicColumn" text="Отчество"
-                                        minWidth="133" resizable="false"/>
+                    />
+                    <JFXTreeTableColumn fx:id="loginColumn" text="Логин"
+                    />
+                    <JFXTreeTableColumn fx:id="passwordColumn" text="Пароль"
+                    />
                 </columns>
             </JFXTreeTableView>
             <JFXButton fx:id="statisticButton" onAction="#openStatistic"

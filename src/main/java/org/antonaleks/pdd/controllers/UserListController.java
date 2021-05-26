@@ -53,6 +53,10 @@ public class UserListController extends BaseController {
     @FXML
     private JFXTreeTableColumn<User, String> patronymicColumn;
     @FXML
+    private JFXTreeTableColumn<User, String> loginColumn;
+    @FXML
+    private JFXTreeTableColumn<User, String> passwordColumn;
+    @FXML
     private JFXTextField searchField;
     @FXML
     private Label treeTableViewCount;
@@ -71,12 +75,6 @@ public class UserListController extends BaseController {
     @FXML
     private JFXDialog dialog;
     private ObservableList<User> dummyData;
-
-//    private final String[] names = {"Morley", "Scott", "Kruger", "Lain",
-//        "Kennedy", "Gawron", "Han", "Hall", "Aydogdu", "Grace",
-//        "Spiers", "Perera", "Smith", "Connoly",
-//        "Sokolowski", "Chaow", "James", "June",};
-//    private final Random random = new SecureRandom();
 
     /**
      * init fxml when loaded.
@@ -103,6 +101,8 @@ public class UserListController extends BaseController {
         setupCellValueFactory(firstNameColumn, User::getNameProperty);
         setupCellValueFactory(lastNameColumn, User::getSurnameProperty);
         setupCellValueFactory(patronymicColumn, User::getPatronymicProperty);
+        setupCellValueFactory(loginColumn, User::getLoginProperty);
+        setupCellValueFactory(passwordColumn, User::getPasswordProperty);
 
         dummyData = fillUserData();
 
@@ -164,7 +164,8 @@ public class UserListController extends BaseController {
                     final User user = UserProp.getValue();
                     return user.getSurname().contains(newVal)
                             || user.getName().contains(newVal)
-                            || user.getPatronymic().contains(newVal);
+                            || user.getPatronymic().contains(newVal)
+                            || user.getLogin().contains(newVal);
                 });
     }
 

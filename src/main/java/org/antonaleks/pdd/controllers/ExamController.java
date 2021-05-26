@@ -22,6 +22,7 @@ import org.antonaleks.pdd.entity.Question;
 import org.antonaleks.pdd.entity.Session;
 import org.antonaleks.pdd.entity.Statistic;
 import org.antonaleks.pdd.model.Exam;
+import org.antonaleks.pdd.utils.PropertiesManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -112,9 +113,13 @@ public class ExamController extends BaseController {
             for (Question question :
                     exam.getTicket().getQuestions().subList(subFrom, subTo)) {
                 JFXButton button = new JFXButton();
-                button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;");
+                button.setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
+
                 button.setText("" + i++);
                 button.setOnMouseClicked(e -> {
+                    if (buttons.get(currentQuestion - 1).getStyle().contains(PropertiesManager.FOCUS_COLOR))
+                        buttons.get(currentQuestion - 1).setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
+
                     currentQuestion = Integer.parseInt(button.getText());
                     setQuestionForButton(question, button);
                 });
@@ -190,7 +195,7 @@ public class ExamController extends BaseController {
         Collections.shuffle(question.getOptions());
         observableListQuestion.setAll(question.getOptions());
         if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
-            button.setStyle("-fx-background-color:#8d9bd7;");
+            button.setStyle("-fx-background-color:" + PropertiesManager.FOCUS_COLOR + ";-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";");
 
         topicsListView.setItems(observableListQuestion);
 
@@ -209,7 +214,7 @@ public class ExamController extends BaseController {
                     correct = question.getRightOption() == item.getId();
                     setGraphic(text);
                     if (item.isChecked())
-                        setStyle("-fx-background-color: Blue;");
+                        setStyle(PropertiesManager.CHECKED_EXAM_BUTTON_COLOR + "-fx-text-fill: " + PropertiesManager.DEFAULT_TEXT_COLOR);
                 }
             }
 
@@ -247,13 +252,19 @@ public class ExamController extends BaseController {
     }
 
     public void nextQuestion() {
-        currentQuestion++;
+        if (currentQuestion < exam.getTicket().getQuestions().size()) {
 
-        if (currentQuestion <= exam.getTicket().getQuestions().size()) {
-            if (buttons.get(currentQuestion - 1).isDisable())
-                nextQuestion();
-            else
-                setQuestionForButton(exam.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
+
+            if (currentQuestion < buttons.size()) {
+                if (buttons.get(currentQuestion - 1).getStyle().contains(PropertiesManager.FOCUS_COLOR))
+                    buttons.get(currentQuestion - 1).setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
+                currentQuestion++;
+
+                if (buttons.get(currentQuestion - 1).isDisable())
+                    nextQuestion();
+                else
+                    setQuestionForButton(exam.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
+            }
         }
     }
 }

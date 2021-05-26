@@ -58,6 +58,16 @@ public class User extends RecursiveTreeObject<User> implements JsonSerializable 
         return new SimpleObjectProperty(patronymic);
     }
 
+    @JsonIgnore
+    public SimpleObjectProperty getLoginProperty() {
+        return new SimpleObjectProperty(login);
+    }
+
+    @JsonIgnore
+    public SimpleObjectProperty getPasswordProperty() {
+        return new SimpleObjectProperty("***");
+    }
+
     @JsonProperty("patronymic")
     private String patronymic;
 
@@ -168,8 +178,6 @@ public class User extends RecursiveTreeObject<User> implements JsonSerializable 
         MongoHelper.getInstance().updateUser(this);
     }
 }
-
-
 
 
 class PasswordUtils {

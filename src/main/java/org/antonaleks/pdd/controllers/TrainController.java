@@ -6,7 +6,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -22,6 +21,7 @@ import org.antonaleks.pdd.entity.Question;
 import org.antonaleks.pdd.entity.Session;
 import org.antonaleks.pdd.entity.Topic;
 import org.antonaleks.pdd.model.Training;
+import org.antonaleks.pdd.utils.PropertiesManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -48,6 +48,7 @@ public class TrainController extends BaseController {
     private List<JFXButton> buttons;
     private int currentQuestion;
     private Training training;
+    private Timeline delayForNext = new Timeline();
 
     @FXML
     public void initialize(int numberTicket) throws IOException {
@@ -87,10 +88,12 @@ public class TrainController extends BaseController {
                 training.getTicket().getQuestions()) {
             JFXButton button = new JFXButton();
             button.setButtonType(JFXButton.ButtonType.RAISED);
-            button.setStyle("-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;");
+            button.setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
 
             button.setText("" + i++);
             button.setOnMouseClicked(e -> {
+                if (buttons.get(currentQuestion - 1).getStyle().contains(PropertiesManager.FOCUS_COLOR))
+                    buttons.get(currentQuestion - 1).setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
                 currentQuestion = Integer.parseInt(button.getText());
                 setQuestionForButton(question, button);
             });
@@ -152,23 +155,24 @@ public class TrainController extends BaseController {
     }
 
     private void setQuestionForButton(Question question, JFXButton button) {
-
+        delayForNext.pause();
         currentTip = question.getComment();
 
-        textQuestion.setText(question.getText());
+        textQuestion.setText(question.getText() + " " + question.getRightOption());
         textTip.setText("");
 
         ObservableList<Object> observableListQuestion = FXCollections.observableArrayList();
         Collections.shuffle(question.getOptions());
         observableListQuestion.setAll(question.getOptions());
-        if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
-            button.setStyle("-fx-background-color:#8d9bd7;-fx-text-fill:WHITE;");
+        if (!button.getStyle().contains(PropertiesManager.RIGHT_BUTTON_COLOR) && !button.getStyle().contains(PropertiesManager.FAIL_BUTTON_COLOR))
+            button.setStyle("-fx-background-color:" + PropertiesManager.FOCUS_COLOR + ";-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";");
 
         topicsListView.setItems(observableListQuestion);
 
 
         topicsListView.setCellFactory(i -> new ListCell<Option>() {
             private boolean correct = false;
+
             @Override
             public void updateItem(Option item, boolean empty) {
                 super.updateItem(item, empty);
@@ -180,7 +184,7 @@ public class TrainController extends BaseController {
                     setPrefWidth(300);
 
                     if (item.isChecked()) {
-                        setStyle((correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;") + "-fx-text-fill: WHITE");
+                        setStyle((correct ? "-fx-background-color: " + PropertiesManager.RIGHT_BUTTON_COLOR + ";" : "-fx-background-color: " + PropertiesManager.FAIL_BUTTON_COLOR + ";") + "-fx-text-fill: " + PropertiesManager.DEFAULT_TEXT_COLOR);
                     }
                 }
             }
@@ -189,14 +193,22 @@ public class TrainController extends BaseController {
             public void updateSelected(boolean selected) {
                 super.updateSelected(selected);
                 if (selected) {
-                    setStyle((correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;") + "-fx-text-fill: WHITE");
+                    setStyle((correct ? "-fx-background-color: " + PropertiesManager.RIGHT_BUTTON_COLOR + ";" : "-fx-background-color: " + PropertiesManager.FAIL_BUTTON_COLOR + ";") + "-fx-text-fill: " + PropertiesManager.DEFAULT_TEXT_COLOR);
 
-                    getItem().setChecked();
-                    if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red")) {
-                        button.setStyle((correct ? "-fx-background-color: Green;" : "-fx-background-color: Red;") + "-fx-text-fill: WHITE");
+
+                    if (!button.getStyle().contains(PropertiesManager.RIGHT_BUTTON_COLOR) && !button.getStyle().contains(PropertiesManager.FAIL_BUTTON_COLOR)) {
+                        getItem().setChecked();
+                        button.setStyle((correct ? "-fx-background-color: " + PropertiesManager.RIGHT_BUTTON_COLOR + ";" : "-fx-background-color: " + PropertiesManager.FAIL_BUTTON_COLOR + ";") + "-fx-text-fill: " + PropertiesManager.DEFAULT_TEXT_COLOR);
                         if (!correct)
                             textTip.setText(question.getComment());
-                        else nextQuestion();
+                        else {
+                            delayForNext = new Timeline(new KeyFrame(Duration.seconds(3), ev -> {
+                                nextQuestion();
+                            }));
+                            delayForNext.setCycleCount(1);
+                            if (currentQuestion < training.getTicket().getQuestions().size())
+                                delayForNext.play();
+                        }
                     }
                 }
             }
@@ -213,10 +225,11 @@ public class TrainController extends BaseController {
     }
 
     @FXML
-    public void terminateTraining(ActionEvent event) {
+    public void terminateTraining() {
         int count = (int) training.getTicket().getQuestions().stream().filter(item ->
                 item.getRightOption() != (item.getOptions().stream().filter(Option::isChecked).findAny().orElse(new Option()).getId())).count();
-        showDialog(String.format("Допущено ошибок: %s\nВремя: %s", count, timerLabel.getText()));
+        int skipped = (int) training.getTicket().getQuestions().stream().filter(i -> i.getOptions().stream().filter(Option::isChecked).findAny().orElse(null) == null).count();
+        showDialog(String.format("Допущено ошибок: %s\nПропущено: %s\nВремя: %s", count - skipped, skipped, timerLabel.getText()));
     }
 
     public void start(Stage window, int number) throws Exception {
@@ -225,9 +238,15 @@ public class TrainController extends BaseController {
     }
 
     public void nextQuestion() {
-        currentQuestion++;
-        if (currentQuestion <= training.getTicket().getQuestions().size())
-            setQuestionForButton(training.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
 
+        if (currentQuestion < buttons.size()) {
+            if (buttons.get(currentQuestion - 1).getStyle().contains(PropertiesManager.FOCUS_COLOR))
+                buttons.get(currentQuestion - 1).setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
+
+            currentQuestion++;
+
+            setQuestionForButton(training.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
+        } else
+            terminateTraining();
     }
 }
