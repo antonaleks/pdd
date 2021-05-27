@@ -199,12 +199,13 @@ public final class MongoHelper {
 
     }
 
-    public void updateUser(User user) throws IOException {
+    public void updateUserStatistic(User user) throws IOException {
         MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionUser());
 
         BasicDBObject query = new BasicDBObject();
         query.put("login", user.getLogin());
         query.put("password", user.getPassword());
+
 
         BasicDBObject newDocument = new BasicDBObject();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -214,6 +215,23 @@ public final class MongoHelper {
 
         BasicDBObject updateObject = new BasicDBObject();
         updateObject.put("$set", newDocument);
+        collection.updateOne(query, updateObject);
+
+    }
+
+    public void updateUser(User user) throws IOException {
+        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionUser());
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("login", user.getLogin());
+
+        BasicDBObject newDocument = new BasicDBObject();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String questionAsString = objectMapper.writeValueAsString(user);
+        Document doc = Document.parse(questionAsString);
+
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", doc);
         collection.updateOne(query, updateObject);
 
     }

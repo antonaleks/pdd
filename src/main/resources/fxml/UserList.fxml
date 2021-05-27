@@ -11,6 +11,7 @@
                 <Label styleClass="title-label">Пользователи системы</Label>
                 <JFXButton fx:id="treeTableViewAdd" buttonType="FLAT" text="Добавить"/>
                 <JFXButton fx:id="treeTableViewRemove" buttonType="FLAT" text="Удалить"/>
+
                 <StackPane HBox.hgrow="ALWAYS">
                     <StackPane StackPane.alignment="CENTER_RIGHT" maxWidth="200">
                         <JFXTextField fx:id="searchField" promptText="Поиск..."></JFXTextField>
@@ -67,6 +68,24 @@
                 </JFXButton>
                 <JFXButton fx:id="acceptButton" styleClass="dialog-accept" onAction="#addUser">Добавить
                 </JFXButton>
+
+            </actions>
+        </JFXDialogLayout>
+    </JFXDialog>
+    <JFXDialog fx:id="dialogUpdate">
+        <JFXDialogLayout>
+            <heading>
+                <Label>Обновление пользователя</Label>
+            </heading>
+            <body>
+                <Label>Применить изменения?</Label>
+            </body>
+            <actions>
+                <JFXButton fx:id="updateDeclineButton" styleClass="dialog-accept">Отмена
+                </JFXButton>
+                <JFXButton fx:id="updateAcceptButton" styleClass="dialog-accept">Обновить
+                </JFXButton>
+
             </actions>
         </JFXDialogLayout>
     </JFXDialog>

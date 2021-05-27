@@ -14,6 +14,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <resources>src/main/resources</resources>
+        <excludeFolder>assets</excludeFolder>
 
     </properties>
     <dependencies>
@@ -130,6 +131,7 @@
                                 <mainClass>org.antonaleks.pdd.MainLogin</mainClass>
                                 <preCp>anything</preCp>
                             </classPath>
+
                             <icon>${resources}/car.ico</icon>
                             <jre>
                                 <minVersion>1.8.0</minVersion>

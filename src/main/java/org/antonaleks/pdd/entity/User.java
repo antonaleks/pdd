@@ -79,6 +79,11 @@ public class User extends RecursiveTreeObject<User> implements JsonSerializable 
         return String.format("Пользователь: %s %s %s", surname, name, patronymic);
     }
 
+    @JsonIgnore
+    public void setPassword(String password) {
+        this.password = PasswordUtils.generateSecurePassword(password);
+    }
+
     @JsonProperty("password")
     private String password;
 
@@ -175,6 +180,10 @@ public class User extends RecursiveTreeObject<User> implements JsonSerializable 
     }
 
     public void updateStatistic() throws IOException {
+        MongoHelper.getInstance().updateUserStatistic(this);
+    }
+
+    public void update() throws IOException {
         MongoHelper.getInstance().updateUser(this);
     }
 }

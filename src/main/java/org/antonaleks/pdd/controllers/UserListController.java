@@ -1,6 +1,8 @@
 package org.antonaleks.pdd.controllers;
 
 import com.jfoenix.controls.*;
+import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
+import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import io.datafx.controller.ViewController;
 import io.datafx.controller.flow.context.FXMLViewFlowContext;
@@ -40,6 +42,8 @@ public class UserListController extends BaseController {
     public JFXTextField surnameField;
     public JFXTextField nameField;
     public JFXTextField patronymicField;
+    public JFXButton updateDeclineButton;
+    public JFXButton updateAcceptButton;
 
     // readonly table view
     @FXMLViewFlowContext
@@ -74,6 +78,8 @@ public class UserListController extends BaseController {
     private StackPane root;
     @FXML
     private JFXDialog dialog;
+    @FXML
+    private JFXDialog dialogUpdate;
     private ObservableList<User> dummyData;
 
     /**
@@ -109,6 +115,8 @@ public class UserListController extends BaseController {
         treeTableView.setRoot(new RecursiveTreeItem<>(dummyData, RecursiveTreeObject::getChildren));
 
         treeTableView.setShowRoot(false);
+        treeTableView.setEditable(true);
+
         treeTableViewRemove.disableProperty()
                 .bind(Bindings.equal(-1, treeTableView.getSelectionModel().selectedIndexProperty()));
         statisticButton.disableProperty()
@@ -125,7 +133,36 @@ public class UserListController extends BaseController {
                 ioException.printStackTrace();
             }
         });
+
         searchField.textProperty().addListener(setupSearchField(treeTableView));
+
+        // add editors
+        passwordColumn.setCellFactory((TreeTableColumn<User, String> param) -> {
+            return new GenericEditableTreeTableCell<>(
+                    new TextFieldEditorBuilder());
+        });
+        updateDeclineButton.setOnAction(action -> dialogUpdate.close());
+
+        passwordColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<User, String> t) -> {
+
+            t.getTreeTableView().refresh();
+            dialogUpdate.setTransitionType(JFXDialog.DialogTransition.RIGHT);
+            dialogUpdate.show((StackPane) context.getRegisteredObject("ContentPane"));
+            updateAcceptButton.setOnAction(i -> {
+                System.out.println(t.getRowValue().getValue());
+                t.getRowValue().getValue().setPassword(t.getNewValue());
+                try {
+                    t.getRowValue().getValue().update();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                dialogUpdate.close();
+            });
+
+
+        });
+
+
     }
 
     private void showDialog() {
@@ -147,7 +184,7 @@ public class UserListController extends BaseController {
     private void addUser() throws IOException {
         User user = new User(loginField.getText(), passwordField.getText(),
                 nameField.getText(), surnameField.getText(), patronymicField.getText(), "USERS");
-        List<User> users = new ArrayList();
+        List<User> users = new ArrayList<>();
         users.add(user);
         MongoHelper.getInstance().<User>insertJsonMany(users, PropertiesManager.getDbCollectionUser());
 
@@ -155,6 +192,12 @@ public class UserListController extends BaseController {
         final IntegerProperty currCountProp = treeTableView.currentItemsCountProperty();
         currCountProp.set(currCountProp.get() + 1);
         dialog.close();
+
+    }
+
+    @FXML
+    private void updateUser() {
+
 
     }
 
