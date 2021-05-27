@@ -7,6 +7,8 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -14,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.antonaleks.pdd.entity.Option;
@@ -218,9 +221,22 @@ public class TrainController extends BaseController {
             ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(question.getImage().getBytes()));
             Image img = new Image(bis);
             imageView.setImage(img);
+            Bounds boundsImage = imageView.getBoundsInParent();
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+
+            Rectangle2D boundsResolution = Screen.getScreens().get(0).getBounds();
+            double width = (boundsResolution.getWidth()) / 5;
+            double height = (boundsResolution.getHeight()) / 5;
+            imageView.fitHeightProperty().set(height);
+            imageView.fitHeightProperty().set(width);
+
+
         } catch (Exception ex) {
             imageView.setImage(null);
+            imageView.fitHeightProperty().set(0);
+            imageView.fitHeightProperty().set(0);
         }
+
 
     }
 

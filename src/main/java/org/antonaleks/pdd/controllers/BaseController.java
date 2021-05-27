@@ -12,6 +12,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 abstract class BaseController {
+    protected double width;
+    protected double height;
 
     void loadModalWindow(String title, Parent root) {
 //        javafx.stage.Window parentWindow = ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -21,13 +23,14 @@ abstract class BaseController {
         decorator.setGraphic(new SVGGlyph(""));
 
         stage.setTitle(title);
-        double width = 1200;
-        double height = 800;
+        width = 1200;
+        height = 800;
         try {
             Rectangle2D bounds = Screen.getScreens().get(0).getBounds();
             width = bounds.getWidth() / 1.2;
             height = bounds.getHeight() / 1.1;
-        }catch (Exception e){ }
+        } catch (Exception e) {
+        }
 
         Scene scene = new Scene(decorator, width, height);
         final ObservableList<String> stylesheets = scene.getStylesheets();
@@ -37,8 +40,8 @@ abstract class BaseController {
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
 //        stage.initOwner(parentWindow);
-        stage.setMinHeight(height);
-        stage.setMinWidth(width);
+        stage.setHeight(height);
+        stage.setWidth(width);
         stage.show();
 //        stage.setResizable(true);
 //        stage.setScene(new Scene(root));

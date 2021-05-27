@@ -149,7 +149,6 @@ public class UserListController extends BaseController {
             dialogUpdate.setTransitionType(JFXDialog.DialogTransition.RIGHT);
             dialogUpdate.show((StackPane) context.getRegisteredObject("ContentPane"));
             updateAcceptButton.setOnAction(i -> {
-                System.out.println(t.getRowValue().getValue());
                 t.getRowValue().getValue().setPassword(t.getNewValue());
                 try {
                     t.getRowValue().getValue().update();

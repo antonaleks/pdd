@@ -28,7 +28,7 @@
                 </right>
 
             </BorderPane>
-            <StackPane fx:id="buttonStackPane" prefHeight="230">
+            <StackPane fx:id="buttonStackPane">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
 
@@ -40,25 +40,25 @@
         </VBox>
     </top>
     <center>
-        <VBox>
-            <StackPane minHeight="200">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
+        <VBox alignment="CENTER">
 
-                </padding>
-                <ImageView fx:id="imageView"
-                           preserveRatio="true" fitHeight="200"/>
-            </StackPane>
+            <padding>
+                <Insets top="50" right="20" bottom="50" left="20"/>
+            </padding>
+
+            <ImageView fx:id="imageView"
+                       preserveRatio="true"/>
+
             <TextFlow>
                 <children>
-                    <Label fx:id="textQuestion" text="Label" maxWidth="700" wrapText="true"/>
+                    <Label fx:id="textQuestion" text="Label" wrapText="true"/>
                 </children>
             </TextFlow>
 
-            <JFXListView fx:id="topicsListView" minHeight="120"/>
+            <JFXListView fx:id="topicsListView"/>
             <TextFlow>
                 <children>
-                    <Label fx:id="textTip"  maxWidth="700" wrapText="true"/>
+                    <Label fx:id="textTip" wrapText="true"/>
                 </children>
             </TextFlow>
 
