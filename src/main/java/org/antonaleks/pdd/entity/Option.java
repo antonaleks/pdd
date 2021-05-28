@@ -59,6 +59,6 @@ public class Option implements JsonSerializable {
 
     @Override
     public String toString() {
-        return text + " " + id;
+        return text;
     }
 }

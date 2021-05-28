@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXMasonryPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
@@ -33,21 +31,15 @@
         </VBox>
     </top>
     <center>
-        <VBox>
-            <StackPane minHeight="200">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
-                <ImageView fx:id="imageView" preserveRatio="true" fitHeight="200"/>
-            </StackPane>
+        <VBox alignment="CENTER" fx:id="vboxPane" spacing="20">
+            <padding>
+                <Insets top="50" right="20" bottom="50" left="20"/>
+            </padding>
             <TextFlow>
                 <children>
                     <Label fx:id="textQuestion" text="Label" maxWidth="700" wrapText="true"/>
                 </children>
             </TextFlow>
-
-            <JFXListView fx:id="topicsListView" minHeight="120"/>
-
         </VBox>
     </center>
     <bottom>

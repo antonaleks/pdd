@@ -65,7 +65,7 @@ public class TicketByTopicController extends BaseController {
                 loadModalWindow("Тренировка", root);
             }
         });
-
+        topicsListView.setPrefHeight(height / 1.3);
 
 
         Platform.runLater(() -> scrollPane.requestLayout());

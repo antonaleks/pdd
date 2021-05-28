@@ -4,21 +4,22 @@ import com.jfoenix.controls.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.antonaleks.pdd.components.ImageViewPane;
 import org.antonaleks.pdd.entity.Option;
 import org.antonaleks.pdd.entity.Question;
 import org.antonaleks.pdd.entity.Session;
@@ -35,18 +36,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 //@ViewController(value = "/fxml/Main.fxml", title = "PDD")
 public class TrainController extends BaseController {
     @FXML
-    public JFXListView topicsListView;
-    @FXML
     public JFXMasonryPane masonryPane;
     @FXML
     public Label textQuestion;
-    public ImageView imageView;
-    public StackPane buttonStackPane;
+    public ScrollPane buttonStackPane;
 
     public Label timerLabel;
     public JFXButton alertButton;
     public JFXButton closeButton;
     public Label textTip;
+    public StackPane listStackPane;
+    public StackPane imageStackPane;
+    public VBox vboxPane;
     private String currentTip;
     private List<JFXButton> buttons;
     private int currentQuestion;
@@ -55,18 +56,22 @@ public class TrainController extends BaseController {
 
     @FXML
     public void initialize(int numberTicket) throws IOException {
+        super.initialize();
         training = new Training(numberTicket, Session.getInstance().getCurrentCategory());
         setInitProps(training);
     }
 
     @FXML
     public void initialize(Topic topic) throws IOException {
+        super.initialize();
         training = new Training(topic, Session.getInstance().getCurrentCategory());
         setInitProps(training);
     }
 
 
     public void setInitProps(Training training) throws IOException {
+        vboxPane.getChildren().add(0, new Label());
+        vboxPane.getChildren().add(2, new Label());
 
         alertButton.setOnAction(action -> {
             JFXAlert alert = new JFXAlert((Stage) alertButton.getScene().getWindow());
@@ -89,9 +94,13 @@ public class TrainController extends BaseController {
         buttons = new ArrayList<JFXButton>();
         for (Question question :
                 training.getTicket().getQuestions()) {
+//            StackPane child = new StackPane();
+//            JFXDepthManager.setDepth(child, 1);
+
             JFXButton button = new JFXButton();
             button.setButtonType(JFXButton.ButtonType.RAISED);
             button.setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
+
 
             button.setText("" + i++);
             button.setOnMouseClicked(e -> {
@@ -99,12 +108,20 @@ public class TrainController extends BaseController {
                     buttons.get(currentQuestion - 1).setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
                 currentQuestion = Integer.parseInt(button.getText());
                 setQuestionForButton(question, button);
+
             });
+
+//            child.getChildren().add(button);
             buttons.add(button);
+            children.add(button);
         }
 
-        children.addAll(buttons);
+
         masonryPane.getChildren().addAll(children);
+
+        Platform.runLater(() -> buttonStackPane.requestLayout());
+
+        JFXScrollPane.smoothScrolling(buttonStackPane);
 
         setQuestionForButton(training.getTicket().getQuestions().get(0), buttons.get(0));
 
@@ -161,8 +178,10 @@ public class TrainController extends BaseController {
         delayForNext.pause();
         currentTip = question.getComment();
 
-        textQuestion.setText(question.getText() + " " + question.getRightOption());
+        textQuestion.setText(question.getText());
         textTip.setText("");
+        textTip.setMaxWidth(width / 1.1);
+        textQuestion.setMaxWidth(width / 1.1);
 
         ObservableList<Object> observableListQuestion = FXCollections.observableArrayList();
         Collections.shuffle(question.getOptions());
@@ -170,8 +189,10 @@ public class TrainController extends BaseController {
         if (!button.getStyle().contains(PropertiesManager.RIGHT_BUTTON_COLOR) && !button.getStyle().contains(PropertiesManager.FAIL_BUTTON_COLOR))
             button.setStyle("-fx-background-color:" + PropertiesManager.FOCUS_COLOR + ";-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";");
 
-        topicsListView.setItems(observableListQuestion);
+        JFXListView topicsListView = new JFXListView();
 
+        topicsListView.setItems(observableListQuestion);
+        topicsListView.setMinHeight(height / 6);
 
         topicsListView.setCellFactory(i -> new ListCell<Option>() {
             private boolean correct = false;
@@ -184,7 +205,8 @@ public class TrainController extends BaseController {
                     correct = question.getRightOption() == item.getId();
                     setText("" + id + ". " + item);
                     setWrapText(true);
-                    setPrefWidth(300);
+                    setPrefWidth(width / 2);
+
 
                     if (item.isChecked()) {
                         setStyle((correct ? "-fx-background-color: " + PropertiesManager.RIGHT_BUTTON_COLOR + ";" : "-fx-background-color: " + PropertiesManager.FAIL_BUTTON_COLOR + ";") + "-fx-text-fill: " + PropertiesManager.DEFAULT_TEXT_COLOR);
@@ -216,25 +238,27 @@ public class TrainController extends BaseController {
                 }
             }
         });
+        topicsListView.autosize();
+        vboxPane.getChildren().set(2, topicsListView);
+
+        ImageView imageView = new ImageView();
 
         try {
             ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(question.getImage().getBytes()));
             Image img = new Image(bis);
             imageView.setImage(img);
-            Bounds boundsImage = imageView.getBoundsInParent();
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
-            Rectangle2D boundsResolution = Screen.getScreens().get(0).getBounds();
-            double width = (boundsResolution.getWidth()) / 5;
-            double height = (boundsResolution.getHeight()) / 5;
-            imageView.fitHeightProperty().set(height);
-            imageView.fitHeightProperty().set(width);
-
+            ImageViewPane viewPane = new ImageViewPane(imageView);
+            viewPane.setMaxWidth(1000);
+            vboxPane.getChildren().set(0, viewPane);
 
         } catch (Exception ex) {
             imageView.setImage(null);
             imageView.fitHeightProperty().set(0);
-            imageView.fitHeightProperty().set(0);
+            imageView.fitWidthProperty().set(0);
+            vboxPane.getChildren().set(0, new ImageViewPane());
+
+
         }
 
 
@@ -266,3 +290,4 @@ public class TrainController extends BaseController {
             terminateTraining();
     }
 }
+

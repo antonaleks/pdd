@@ -13,10 +13,12 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.antonaleks.pdd.components.ImageViewPane;
 import org.antonaleks.pdd.entity.Option;
 import org.antonaleks.pdd.entity.Question;
 import org.antonaleks.pdd.entity.Session;
@@ -39,14 +41,15 @@ public class ExamController extends BaseController {
     public static final String EXAM_CONTINUE = "Получено %s ошибок, добавлены вопросы";
     public static final String EXAM_NOT_PASSED = "Экзамен не сдан, ошибок: %s\nОставшееся время: %s";
     private static final int FIVE_MINUTES = 60 * 5;
-    @FXML
-    public JFXListView topicsListView;
+    //    @FXML
+//    public JFXListView topicsListView;
     @FXML
     public JFXMasonryPane masonryPane;
     @FXML
     public Label textQuestion;
     public ImageView imageView;
     public StackPane buttonStackPane;
+    public StackPane listStackPane;
 
     private Timeline timeline;
     public Label timerLabel;
@@ -56,6 +59,7 @@ public class ExamController extends BaseController {
     private int currentQuestion;
     private Exam exam;
     private AtomicInteger time;
+    public VBox vboxPane;
 
     @FXML
     public void initialize() throws IOException {
@@ -64,7 +68,8 @@ public class ExamController extends BaseController {
     }
 
     public void setInitProps() throws IOException {
-
+        vboxPane.getChildren().add(0, new Label());
+        vboxPane.getChildren().add(2, new Label());
         buttons = new ArrayList<>();
         fillButtonsQuestion(0, 20);
 
@@ -197,7 +202,10 @@ public class ExamController extends BaseController {
         if (!button.getStyle().contains("Green") && !button.getStyle().contains("Red"))
             button.setStyle("-fx-background-color:" + PropertiesManager.FOCUS_COLOR + ";-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";");
 
+        JFXListView topicsListView = new JFXListView();
+
         topicsListView.setItems(observableListQuestion);
+        topicsListView.setMinHeight(height / 6);
 
 
         topicsListView.setCellFactory(i -> new ListCell<Option>() {
@@ -230,15 +238,31 @@ public class ExamController extends BaseController {
             }
 
         });
+        topicsListView.autosize();
+        vboxPane.getChildren().set(2, topicsListView);
+
+        ImageView imageView = new ImageView();
 
         try {
             ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(question.getImage().getBytes()));
             Image img = new Image(bis);
             imageView.setImage(img);
+//
+//            imageView.fitHeightProperty().set(height/5);
+//            imageView.fitWidthProperty().set(width/5);
+
+            ImageViewPane viewPane = new ImageViewPane(imageView);
+            viewPane.setMaxWidth(1000);
+            vboxPane.getChildren().set(0, viewPane);
+
         } catch (Exception ex) {
             imageView.setImage(null);
-        }
+            imageView.fitHeightProperty().set(0);
+            imageView.fitWidthProperty().set(0);
+            vboxPane.getChildren().set(0, new ImageViewPane());
 
+
+        }
     }
 
     @FXML
