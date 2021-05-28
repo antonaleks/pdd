@@ -20,12 +20,12 @@ abstract class BaseController {
 
     @FXML
     void initialize() throws IOException {
-        double default_width = 1200;
-        double default_height = 800;
+        double default_width = 800;
+        double default_height = 1000;
         try {
             Rectangle2D bounds = Screen.getScreens().get(0).getBounds();
-            this.width = Math.max(bounds.getWidth() / 1.2, default_width);
-            this.height = Math.max(bounds.getHeight() / 1.1, default_height);
+            this.width = Math.min(bounds.getWidth() / 1.2, default_width);
+            this.height = Math.min(bounds.getHeight() / 1.1, default_height);
         } catch (Exception e) {
         }
     }
@@ -49,8 +49,8 @@ abstract class BaseController {
 //        stage.initOwner(parentWindow);
         stage.setHeight(this.height);
         stage.setWidth(this.width);
-        stage.setMinHeight(900);
-        stage.setMinWidth(900);
+        stage.setMinHeight(600);
+        stage.setMinWidth(800);
         stage.show();
 //        stage.setResizable(true);
 //        stage.setScene(new Scene(root));
