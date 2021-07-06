@@ -286,8 +286,19 @@ public class TrainController extends BaseController {
             currentQuestion++;
 
             setQuestionForButton(training.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
-        } else
-            terminateTraining();
+        } else {
+            Optional<JFXButton> skippedQuestion = buttons.stream().filter(x -> x.getStyle().contains(PropertiesManager.PASSIVE_COLOR)).findFirst();
+            if (skippedQuestion.isPresent()) {
+                if (buttons.get(currentQuestion - 1).getStyle().contains(PropertiesManager.FOCUS_COLOR))
+                    buttons.get(currentQuestion - 1).setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
+
+                currentQuestion = Integer.parseInt(skippedQuestion.get().getText());
+
+                setQuestionForButton(training.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
+
+            } else
+                terminateTraining();
+        }
     }
 }
 

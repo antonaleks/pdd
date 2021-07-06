@@ -10,13 +10,11 @@ import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.antonaleks.pdd.controllers.EnterFormController;
-import org.antonaleks.pdd.controllers.MainController;
 import org.antonaleks.pdd.db.MongoHelper;
+import org.antonaleks.pdd.utils.PropertiesManager;
 
 
 public class MainLogin extends Application {
@@ -37,9 +35,9 @@ public class MainLogin extends Application {
         decorator.setCustomMaximize(true);
         decorator.setGraphic(new SVGGlyph(""));
 
-        stage.setTitle("ПДД");
+        stage.setTitle(PropertiesManager.getAppTitle());
 
-        double width = 400;
+        double width = 550;
         double height = 600;
 //        try {
 //            Rectangle2D bounds = Screen.getScreens().get(0).getBounds();

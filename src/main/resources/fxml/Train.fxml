@@ -17,19 +17,6 @@
 
     <top>
         <VBox>
-            <BorderPane>
-                <left>
-                    <Label fx:id="timerLabel">
-                    </Label>
-                </left>
-                <right>
-                    <JFXButton fx:id="alertButton"
-                               styleClass="dialog-trigger">Подсказка
-                    </JFXButton>
-                </right>
-
-            </BorderPane>
-
             <ScrollPane fitToWidth="true" fx:id="buttonStackPane" hbarPolicy="NEVER" maxHeight="250">
                 <padding>
                     <Insets top="10" right="0" bottom="10" left="0"/>
@@ -42,6 +29,19 @@
                     </padding>
                 </JFXMasonryPane>
             </ScrollPane>
+
+            <BorderPane>
+                <left>
+                    <Label fx:id="timerLabel" style="-fx-font-size:22px;">
+                    </Label>
+                </left>
+                <right>
+                    <JFXButton fx:id="alertButton"
+                               styleClass="dialog-trigger">Подсказка
+                    </JFXButton>
+                </right>
+
+            </BorderPane>
 
 
         </VBox>
@@ -64,23 +64,23 @@
                     <Label fx:id="textTip" wrapText="true"/>
                 </children>
             </TextFlow>
-
+            <JFXButton fx:id="nextButton" onAction="#nextQuestion"
+                       buttonType="RAISED"
+                       style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:22px;">Следующий
+                вопрос
+            </JFXButton>
         </VBox>
     </center>
     <bottom>
         <BorderPane>
             <left>
+
+            </left>
+            <right>
                 <JFXButton fx:id="closeButton" onAction="#terminateTraining"
                            buttonType="RAISED"
                            style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">Завершить
                     тестирование
-                </JFXButton>
-            </left>
-            <right>
-                <JFXButton fx:id="nextButton" onAction="#nextQuestion"
-                           buttonType="RAISED"
-                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">Следующий
-                    вопрос
                 </JFXButton>
             </right>
         </BorderPane>

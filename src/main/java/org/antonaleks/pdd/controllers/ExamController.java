@@ -5,7 +5,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -266,7 +265,7 @@ public class ExamController extends BaseController {
     }
 
     @FXML
-    public void terminateTraining(ActionEvent event) throws IOException {
+    public void terminateTraining() throws IOException {
         finishExam();
     }
 
@@ -275,7 +274,7 @@ public class ExamController extends BaseController {
 
     }
 
-    public void nextQuestion() {
+    public void nextQuestion() throws IOException {
         if (currentQuestion < exam.getTicket().getQuestions().size()) {
 
 
@@ -288,6 +287,19 @@ public class ExamController extends BaseController {
                     nextQuestion();
                 else
                     setQuestionForButton(exam.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
+            } else {
+                Optional<Question> skippedQuestion = exam.getTicket().getQuestions().subList(0, buttons.size()).stream().filter(item ->
+                        !item.getOptions().stream().filter(Option::isChecked).findAny().isPresent()).findFirst();
+                if (skippedQuestion.isPresent()) {
+                    if (buttons.get(currentQuestion - 1).getStyle().contains(PropertiesManager.FOCUS_COLOR))
+                        buttons.get(currentQuestion - 1).setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
+
+                    currentQuestion = exam.getTicket().getQuestions().indexOf(skippedQuestion.get()) + 1;
+
+                    setQuestionForButton(exam.getTicket().getQuestions().get(currentQuestion - 1), buttons.get(currentQuestion - 1));
+
+                } else
+                    terminateTraining();
             }
         }
     }

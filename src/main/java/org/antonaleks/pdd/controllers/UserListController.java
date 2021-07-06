@@ -238,7 +238,7 @@ public class UserListController extends BaseController {
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
-            loadModalWindow("Тренировка", root);
+            loadModalWindow("Пользователи и статистика", root);
         }
     }
 

@@ -81,7 +81,7 @@ public class EnterFormController extends BaseController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            loadModalWindow("Тренировка", root);
+            loadModalWindow(PropertiesManager.getAppTitle(), root);
             Stage currentStage = (Stage) enterButton.getScene().getWindow();
             currentStage.close();
 

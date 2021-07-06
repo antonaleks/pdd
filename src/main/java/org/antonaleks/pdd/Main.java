@@ -5,6 +5,7 @@ import com.jfoenix.assets.JFoenixResources;
 import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.svg.SVGGlyph;
 import io.datafx.controller.flow.Flow;
+import io.datafx.controller.flow.container.DefaultFlowContainer;
 import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.application.Application;
@@ -15,7 +16,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.antonaleks.pdd.controllers.MainController;
 import org.antonaleks.pdd.db.MongoHelper;
-import io.datafx.controller.flow.container.DefaultFlowContainer;
+import org.antonaleks.pdd.utils.PropertiesManager;
 
 
 public class Main extends Application {
@@ -36,13 +37,13 @@ public class Main extends Application {
         decorator.setCustomMaximize(true);
         decorator.setGraphic(new SVGGlyph(""));
 
-        stage.setTitle("ПДД");
+        stage.setTitle(PropertiesManager.getAppTitle());
 
         double width = 800;
         double height = 600;
         try {
             Rectangle2D bounds = Screen.getScreens().get(0).getBounds();
-            width = bounds.getWidth() / 2.5;
+            width = bounds.getWidth() / 2;
             height = bounds.getHeight() / 1.35;
         }catch (Exception e){ }
 

@@ -2,6 +2,8 @@ package org.antonaleks.pdd.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 
@@ -18,6 +20,13 @@ public class PropertiesManager {
     private static final String dbPort;
     private static final String dbName;
     private static final String dbCollectionTopics;
+
+    public static String getAppTitle() {
+        return appTitle;
+    }
+
+    private static final String appTitle;
+
     public static final String FOCUS_COLOR = "#8d9bd7";
     public static final String DEFAULT_TEXT_COLOR = "WHITE";
     public static final String RIGHT_BUTTON_COLOR = "Green";
@@ -57,7 +66,8 @@ public class PropertiesManager {
             ResourceHelper app = new ResourceHelper();
 
             InputStream is = app.getFileFromResourceAsStream(pathToProperties);
-            props.load(is);
+            props.load(new InputStreamReader(is, StandardCharsets.UTF_8));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,6 +81,7 @@ public class PropertiesManager {
         dbCollectionTopics = props.getProperty("db_topics");
 
         dbCollectionStatistic = props.getProperty("db_statistic");
+        appTitle = props.getProperty("app_title");
 
 
     }

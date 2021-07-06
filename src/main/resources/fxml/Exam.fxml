@@ -9,53 +9,55 @@
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.antonaleks.pdd.controllers.ExamController">
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets top="2" right="2" bottom="2" left="2"/>
 
     </padding>
     <top>
         <VBox>
-            <BorderPane>
-                <center>
-                    <Label fx:id="timerLabel"/>
-                </center>
 
-            </BorderPane>
-            <StackPane fx:id="buttonStackPane" prefHeight="230">
+            <StackPane fx:id="buttonStackPane" prefHeight="180">
                 <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
+                    <Insets top="3" right="10" bottom="3" left="10"/>
                 </padding>
                 <children>
                     <JFXMasonryPane fx:id="masonryPane"/>
                 </children>
             </StackPane>
+            <BorderPane>
+                <left>
+                    <Label fx:id="timerLabel" style="-fx-font-size:22px;"/>
+                </left>
+
+            </BorderPane>
         </VBox>
     </top>
     <center>
-        <VBox alignment="CENTER" fx:id="vboxPane" spacing="20">
+        <VBox alignment="CENTER" fx:id="vboxPane" spacing="5">
             <padding>
-                <Insets top="50" right="20" bottom="50" left="20"/>
+                <Insets top="3" right="20" bottom="3" left="20"/>
             </padding>
             <TextFlow>
                 <children>
                     <Label fx:id="textQuestion" text="Label" maxWidth="700" wrapText="true"/>
                 </children>
             </TextFlow>
+            <JFXButton fx:id="nextButton" onAction="#nextQuestion"
+                       buttonType="RAISED"
+                       style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:22px;">Следующий
+                вопрос
+            </JFXButton>
         </VBox>
     </center>
     <bottom>
         <BorderPane>
             <left>
+
+            </left>
+            <right>
                 <JFXButton fx:id="closeButton" onAction="#terminateTraining"
                            buttonType="RAISED"
                            style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">Завершить
                     экзамен
-                </JFXButton>
-            </left>
-            <right>
-                <JFXButton fx:id="nextButton" onAction="#nextQuestion"
-                           buttonType="RAISED"
-                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">Следующий
-                    вопрос
                 </JFXButton>
             </right>
         </BorderPane>
