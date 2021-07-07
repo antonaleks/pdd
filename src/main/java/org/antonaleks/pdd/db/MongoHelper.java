@@ -13,12 +13,17 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import org.antonaleks.pdd.entity.*;
 import org.antonaleks.pdd.model.Category;
+import org.antonaleks.pdd.utils.HashUtils;
 import org.antonaleks.pdd.utils.PropertiesManager;
 import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -274,5 +279,48 @@ public final class MongoHelper {
         return (int) ((Document) cursor.next()).get("ticketNumber");
     }
 
+    public boolean checkLicense() throws SocketException, UnknownHostException {
+        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionLicense());
+        String mac = getMacAddress();
+        Document dmac = collection.find(eq("mackey", HashUtils.generateSecurePassword(mac))).first();
+        return dmac != null;
+    }
 
+
+    public boolean activateLicense(String licenseKey) throws SocketException, UnknownHostException {
+        MongoCollection<Document> collection = database.getCollection(PropertiesManager.getDbCollectionLicense());
+
+        Document d = collection.find(eq("key", HashUtils.generateSecurePassword(licenseKey))).first();
+
+        if (d != null) {
+            if ((boolean) d.get("activated"))
+                return false;
+            else {
+                String mac = getMacAddress();
+                Document docUp = new Document("mackey", HashUtils.generateSecurePassword(mac)).append("activated", true);
+
+                collection.updateOne(eq("key", HashUtils.generateSecurePassword(licenseKey)), new Document("$set", docUp));
+                d = collection.find(eq("key", HashUtils.generateSecurePassword(licenseKey))).first();
+
+                if (d != null && (boolean) d.get("activated"))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+
+    private String getMacAddress() throws UnknownHostException, SocketException {
+        InetAddress ip = InetAddress.getLocalHost();
+
+        NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+
+        byte[] mac = network.getHardwareAddress();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mac.length; i++) {
+            sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+        }
+
+        return sb.toString();
+    }
 }

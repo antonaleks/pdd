@@ -1,40 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXPasswordField?>
-<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.*?>
 <?import com.jfoenix.validation.RequiredFieldValidator?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+    <BorderPane>
 
 
-    <center>
-        <VBox alignment="CENTER" spacing="30">
+        <center>
+            <VBox alignment="CENTER" spacing="30">
 
 
-            <JFXTextField alignment="CENTER" fx:id="loginField" labelFloat="true" promptText="Имя пользователя">
-                <validators>
-                    <RequiredFieldValidator message="Введите значение!"/>
-                </validators>
-            </JFXTextField>
+                <JFXTextField alignment="CENTER" fx:id="loginField" labelFloat="true" promptText="Имя пользователя">
+                    <validators>
+                        <RequiredFieldValidator message="Введите значение!"/>
+                    </validators>
+                </JFXTextField>
 
-            <JFXPasswordField fx:id="passwordField" labelFloat="true" promptText="Пароль">
-                <validators>
-                    <RequiredFieldValidator message="Введите значение!"/>
-                </validators>
-            </JFXPasswordField>
+                <JFXPasswordField fx:id="passwordField" labelFloat="true" promptText="Пароль">
+                    <validators>
+                        <RequiredFieldValidator message="Введите значение!"/>
+                    </validators>
+                </JFXPasswordField>
 
-            <JFXComboBox fx:id="categoryBox" promptText="Выберите категорию">
-                <validators>
-                    <RequiredFieldValidator message="Введите значение!"/>
-                </validators>
-            </JFXComboBox>
-            <Label fx:id="errorLabel" text="Неверный логин или пароль!" style="-fx-text-fill: RED"/>
-            <JFXButton fx:id="enterButton" text="Войти" onAction="#buttonEnter" buttonType="RAISED"
-                       style="-fx-background-color: #5264AE;-fx-text-fill: White;-fx-font-size: 18"/>
-        </VBox>
-    </center>
-</BorderPane>
+                <JFXComboBox fx:id="categoryBox" promptText="Выберите категорию">
+                    <validators>
+                        <RequiredFieldValidator message="Введите значение!"/>
+                    </validators>
+                </JFXComboBox>
+                <Label fx:id="errorLabel" text="Неверный логин или пароль!" style="-fx-text-fill: RED"/>
+                <JFXButton fx:id="enterButton" text="Войти" onAction="#buttonEnter" buttonType="RAISED"
+                           style="-fx-background-color: #5264AE;-fx-text-fill: White;-fx-font-size: 18"/>
+            </VBox>
+        </center>
+        <JFXDialog fx:id="dialogLicense">
+            <JFXDialogLayout>
+                <heading>
+                    <Label>Лицензия</Label>
+                </heading>
+                <body>
+                    <VBox spacing="8">
+                        <Label>Не обнаружена лицензия</Label>
+                        <JFXTextField alignment="CENTER" fx:id="licenseField" labelFloat="true"
+                                      promptText="Код активации"/>
+                        <Label fx:id="wrongLicense" visible="false">Неверный код!</Label>
+                    </VBox>
+                </body>
+                <actions>
+                    <JFXButton fx:id="updateLicenseButton" styleClass="dialog-accept">Применить
+                    </JFXButton>
+                </actions>
+            </JFXDialogLayout>
+        </JFXDialog>
+    </BorderPane>
+</StackPane>

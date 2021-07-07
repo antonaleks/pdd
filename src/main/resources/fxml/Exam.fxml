@@ -38,7 +38,8 @@
             </padding>
             <TextFlow>
                 <children>
-                    <Label fx:id="textQuestion" text="Label" maxWidth="700" wrapText="true"/>
+                    <Label fx:id="textQuestion" text="Label" maxWidth="700" wrapText="true"
+                           style="-fx-font-size: 24px"/>
                 </children>
             </TextFlow>
             <JFXButton fx:id="nextButton" onAction="#nextQuestion"

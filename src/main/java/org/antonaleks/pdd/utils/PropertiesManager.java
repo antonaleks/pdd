@@ -46,6 +46,13 @@ public class PropertiesManager {
 
     private static final String dbCollectionUser;
 
+    public static String getDbCollectionLicense() {
+        return dbCollectionLicense;
+    }
+
+    private static final String dbCollectionLicense;
+
+
     public static String getDbCollectionQuestion() {
         return dbCollectionQuestion;
     }
@@ -82,6 +89,7 @@ public class PropertiesManager {
 
         dbCollectionStatistic = props.getProperty("db_statistic");
         appTitle = props.getProperty("app_title");
+        dbCollectionLicense = props.getProperty("db_license");
 
 
     }

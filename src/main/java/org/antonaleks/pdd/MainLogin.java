@@ -25,6 +25,7 @@ public class MainLogin extends Application {
     public void start(Stage stage) throws Exception {
         MongoHelper.getInstance();
 
+
         Flow flow = new Flow(EnterFormController.class);
         DefaultFlowContainer container = new DefaultFlowContainer();
         flowContext = new ViewFlowContext();

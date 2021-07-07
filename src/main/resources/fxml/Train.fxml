@@ -56,7 +56,7 @@
 
             <TextFlow>
                 <children>
-                    <Label fx:id="textQuestion" text="Label" wrapText="true" style="-fx-font-size: 20px"/>
+                    <Label fx:id="textQuestion" text="Label" wrapText="true" style="-fx-font-size: 24px"/>
                 </children>
             </TextFlow>
             <TextFlow>
