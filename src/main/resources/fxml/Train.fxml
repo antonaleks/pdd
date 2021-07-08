@@ -17,20 +17,23 @@
 
     <top>
         <VBox>
-            <ScrollPane fitToWidth="true" fx:id="buttonStackPane" hbarPolicy="NEVER" maxHeight="250">
-                <padding>
-                    <Insets top="10" right="0" bottom="10" left="0"/>
+            <ScrollPane fitToWidth="true" fx:id="buttonStackPane" hbarPolicy="NEVER" maxHeight="150">
+                                <padding>
+                                    <Insets top="0" right="5" bottom="10" left="5"/>
 
-                </padding>
+                                </padding>
 
-                <JFXMasonryPane fx:id="masonryPane" HSpacing="5" VSpacing="5">
-                    <padding>
-                        <Insets top="16" right="5" bottom="16" left="5"/>
-                    </padding>
+                <JFXMasonryPane fx:id="masonryPane">
+                    <!--                    <padding>-->
+                    <!--                        <Insets top="16" right="5" bottom="16" left="5"/>-->
+                    <!--                    </padding>-->
                 </JFXMasonryPane>
             </ScrollPane>
 
             <BorderPane>
+                                    <padding>
+                                        <Insets top="5" right="5" bottom="5" left="5"/>
+                                    </padding>
                 <left>
                     <Label fx:id="timerLabel" style="-fx-font-size:22px;">
                     </Label>
@@ -47,42 +50,52 @@
         </VBox>
     </top>
     <center>
-        <VBox alignment="CENTER" fx:id="vboxPane" spacing="20">
-
-
+        <VBox alignment="CENTER" fx:id="vboxPaneImage" spacing="20">
             <padding>
-                <Insets top="50" right="20" bottom="50" left="20"/>
+                <Insets top="5" right="50" bottom="5" left="50"/>
             </padding>
 
-            <TextFlow>
-                <children>
-                    <Label fx:id="textQuestion" text="Label" wrapText="true" style="-fx-font-size: 24px"/>
-                </children>
-            </TextFlow>
-            <TextFlow>
-                <children>
-                    <Label fx:id="textTip" wrapText="true"/>
-                </children>
-            </TextFlow>
-            <JFXButton fx:id="nextButton" onAction="#nextQuestion"
-                       buttonType="RAISED"
-                       style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:22px;">Следующий
-                вопрос
-            </JFXButton>
         </VBox>
     </center>
     <bottom>
         <BorderPane>
+            <padding>
+                <Insets top="5" right="10" bottom="5" left="10"/>
+            </padding>
+            <center>
+                <VBox alignment="CENTER" fx:id="vboxPane" spacing="20">
+                    <TextFlow>
+                        <children>
+                            <Label fx:id="textQuestion" text="Label" wrapText="true" style="-fx-font-size: 24px" />
+                        </children>
+                    </TextFlow>
+                    <TextFlow>
+                        <children>
+                            <Label fx:id="textTip" wrapText="true"/>
+                        </children>
+                    </TextFlow>
+                    <JFXButton fx:id="nextButton" onAction="#nextQuestion"
+                               buttonType="RAISED"
+                               style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:22px;">Следующий
+                        вопрос
+                    </JFXButton>
+                </VBox>
+            </center>
             <left>
 
             </left>
-            <right>
-                <JFXButton fx:id="closeButton" onAction="#terminateTraining"
-                           buttonType="RAISED"
-                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">Завершить
-                    тестирование
-                </JFXButton>
-            </right>
+            <bottom>
+                <BorderPane>
+                    <right>
+                        <JFXButton fx:id="closeButton" onAction="#terminateTraining"
+                                   buttonType="RAISED"
+                                   style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">
+                            Завершить
+                            тестирование
+                        </JFXButton>
+                    </right>
+                </BorderPane>
+            </bottom>
         </BorderPane>
     </bottom>
 

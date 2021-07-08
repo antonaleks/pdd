@@ -3,6 +3,7 @@ package org.antonaleks.pdd.controllers;
 import com.jfoenix.assets.JFoenixResources;
 import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.svg.SVGGlyph;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -51,10 +52,18 @@ abstract class BaseController {
         stage.setWidth(this.width);
         stage.setMinHeight(600);
         stage.setMinWidth(800);
+        ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> {
+            height = stage.getHeight();
+            width = stage.getWidth();
+        };
+
+        stage.widthProperty().addListener(stageSizeListener);
+        stage.heightProperty().addListener(stageSizeListener);
         stage.show();
 //        stage.setResizable(true);
 //        stage.setScene(new Scene(root));
 //        stage.show();
     }
+
 
 }

@@ -117,7 +117,7 @@ public class MongoTest {
 
     @Test
     void testInsertLicense() throws IOException {
-        MongoHelper.getInstance().removeAll("license");
+//        MongoHelper.getInstance().removeAll("license");
 
         MongoClientURI uri = new MongoClientURI(PropertiesManager.getDbUrl());
 
