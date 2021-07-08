@@ -62,7 +62,8 @@ public class EnterFormController extends BaseController {
 //            }
 //        });
         final ObservableList<String> dummyData = FXCollections.observableArrayList();
-        List<String> userList = MongoHelper.getInstance().getUserList(eq("role", "USERS"), null).stream().map(i -> i.getName()).collect(Collectors.toList());//MongoHelper.getInstance().getDocumentList(User.class, PropertiesManager.getDbCollectionUser());
+        List<String> userList = MongoHelper.getInstance().getUserList(eq("role", "USERS"), null)
+                .stream().map(User::getLogin).collect(Collectors.toList());
         dummyData.addAll(userList);
 
         loginField.setItems(dummyData);
