@@ -14,19 +14,19 @@
             <VBox alignment="CENTER" spacing="30">
 
 
-                <JFXTextField alignment="CENTER" fx:id="loginField" labelFloat="true" promptText="Имя пользователя">
-                    <validators>
-                        <RequiredFieldValidator message="Введите значение!"/>
-                    </validators>
-                </JFXTextField>
+                <JFXComboBox fx:id="loginField" labelFloat="true" promptText="Имя пользователя" editable="true" prefWidth="300">
+<!--                    <validators>-->
+<!--                        <RequiredFieldValidator message="Введите значение!"/>-->
+<!--                    </validators>-->
+                </JFXComboBox>
 
-                <JFXPasswordField fx:id="passwordField" labelFloat="true" promptText="Пароль">
+                <JFXPasswordField fx:id="passwordField" labelFloat="true" promptText="Пароль" prefWidth="300">
                     <validators>
                         <RequiredFieldValidator message="Введите значение!"/>
                     </validators>
                 </JFXPasswordField>
 
-                <JFXComboBox fx:id="categoryBox" promptText="Выберите категорию">
+                <JFXComboBox fx:id="categoryBox" promptText="Выберите категорию" prefWidth="300">
                     <validators>
                         <RequiredFieldValidator message="Введите значение!"/>
                     </validators>

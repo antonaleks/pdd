@@ -99,23 +99,12 @@ public class TrainController extends BaseController {
 
         ArrayList<Node> children = new ArrayList<>();
         int i = 1;
-        buttons = new ArrayList<JFXButton>();
+        buttons = new ArrayList<>();
         for (Question question :
                 training.getTicket().getQuestions()) {
-//            StackPane child = new StackPane();
-//            JFXDepthManager.setDepth(child, 1);
-
-//            Pane child = new Pane();
-//            child.setPrefSize(2,2);
-//            JFXDepthManager.setDepth(child, 1);
-//            children.add(child);
-
-//            StackPane body = new StackPane();
-
             JFXButton button = new JFXButton();
             button.setButtonType(JFXButton.ButtonType.RAISED);
             button.setStyle("-fx-text-fill:" + PropertiesManager.DEFAULT_TEXT_COLOR + ";-fx-background-color:" + PropertiesManager.PASSIVE_COLOR + ";-fx-font-size:14px;");
-//            button.setPrefSize(2,2);
 
 
             button.setText("" + i++);
@@ -127,15 +116,6 @@ public class TrainController extends BaseController {
 
             });
 
-//            body.getChildren().add(button);
-
-//            VBox content = new VBox();
-//            content.getChildren().addAll(button);
-
-
-//            button.setPrefSize(5, 5);
-//            child.getChildren().add(button);
-//            button.setMaxSize(3,3);
             buttons.add(button);
             children.add(button);
 
@@ -143,10 +123,6 @@ public class TrainController extends BaseController {
 
 
         masonryPane.getChildren().addAll(children);
-//        masonryPane.setHSpacing(1);
-//        masonryPane.cellWidthProperty().set(100);
-//        masonryPane.setCellWidth(width/20);
-        masonryPane.setPadding(new Insets(1,1,1,1));
 
 
         Platform.runLater(() -> buttonStackPane.requestLayout());
@@ -236,7 +212,7 @@ public class TrainController extends BaseController {
                     setText("" + id + ". " + item);
                     setFont(Font.font(16));
                     setWrapText(true);
-                    setPrefWidth(width / 2);
+                    setPrefWidth(width / 2.1);
 
 
                     if (item.isChecked()) {
@@ -287,13 +263,21 @@ public class TrainController extends BaseController {
             vboxPaneImage.setPrefHeight(1000);
 
 
+            borderPane.setCenter(null);
+            borderPane.setBottom(null);
+            borderPane.setCenter(vboxPaneImage);
+            borderPane.setBottom(vboxPane);
+
+
         } catch (Exception ex) {
             imageView.setImage(null);
             imageView.fitHeightProperty().set(0);
             imageView.fitWidthProperty().set(0);
             vboxPaneImage.getChildren().set(0, new ImageViewPane());
 
-
+            borderPane.setCenter(null);
+            borderPane.setBottom(null);
+            borderPane.setCenter(vboxPane);
         }
 
 

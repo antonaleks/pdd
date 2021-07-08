@@ -16,8 +16,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 abstract class BaseController {
-    protected double width;
-    protected double height;
+    protected static double width;
+    protected static double height;
+//    protected static Stage stage;
 
     @FXML
     void initialize() throws IOException {
@@ -64,6 +65,11 @@ abstract class BaseController {
 //        stage.setScene(new Scene(root));
 //        stage.show();
     }
+
+//    protected void updateSize(){
+//        height = stage.getHeight();
+//        width = stage.getWidth();
+//    }
 
 
 }

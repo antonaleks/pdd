@@ -7,7 +7,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.antonaleks.pdd.controllers.TrainController">
     <padding>
         <Insets top="5" right="10" bottom="10" left="5"/>
@@ -15,89 +15,93 @@
     </padding>
 
 
-    <top>
-        <VBox>
-            <ScrollPane fitToWidth="true" fx:id="buttonStackPane" hbarPolicy="NEVER" maxHeight="150">
-                                <padding>
-                                    <Insets top="0" right="5" bottom="10" left="5"/>
+        <top>
+            <VBox>
+                <ScrollPane fitToWidth="true" fx:id="buttonStackPane" hbarPolicy="NEVER" maxHeight="150">
+                    <padding>
+                        <Insets top="0" right="5" bottom="10" left="5"/>
 
-                                </padding>
+                    </padding>
 
-                <JFXMasonryPane fx:id="masonryPane">
-                    <!--                    <padding>-->
-                    <!--                        <Insets top="16" right="5" bottom="16" left="5"/>-->
-                    <!--                    </padding>-->
-                </JFXMasonryPane>
-            </ScrollPane>
+                    <JFXMasonryPane fx:id="masonryPane">
+                        <!--                    <padding>-->
+                        <!--                        <Insets top="16" right="5" bottom="16" left="5"/>-->
+                        <!--                    </padding>-->
+                    </JFXMasonryPane>
+                </ScrollPane>
 
+                <BorderPane>
+                    <padding>
+                        <Insets top="5" right="5" bottom="5" left="5"/>
+                    </padding>
+                    <left>
+                        <Label fx:id="timerLabel" style="-fx-font-size:22px;">
+                        </Label>
+                    </left>
+                    <right>
+                        <JFXButton fx:id="alertButton"
+                                   styleClass="dialog-trigger">Подсказка
+                        </JFXButton>
+                    </right>
+
+                </BorderPane>
+
+
+            </VBox>
+        </top>
+    <center>
+    <BorderPane fx:id="borderPane">
+        <center>
+            <VBox alignment="CENTER" fx:id="vboxPaneImage" spacing="20">
+                <padding>
+                    <Insets top="5" right="50" bottom="5" left="50"/>
+                </padding>
+
+            </VBox>
+        </center>
+        <bottom>
             <BorderPane>
-                                    <padding>
-                                        <Insets top="5" right="5" bottom="5" left="5"/>
-                                    </padding>
+                <padding>
+                    <Insets top="5" right="10" bottom="5" left="10"/>
+                </padding>
+                <center>
+                    <VBox alignment="CENTER" fx:id="vboxPane" spacing="20">
+                        <TextFlow>
+                            <children>
+                                <Label fx:id="textQuestion" text="Label" wrapText="true" style="-fx-font-size: 24px"/>
+                            </children>
+                        </TextFlow>
+                        <TextFlow>
+                            <children>
+                                <Label fx:id="textTip" wrapText="true"/>
+                            </children>
+                        </TextFlow>
+                        <JFXButton fx:id="nextButton" onAction="#nextQuestion"
+                                   buttonType="RAISED"
+                                   style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:22px;">
+                            Следующий
+                            вопрос
+                        </JFXButton>
+                    </VBox>
+                </center>
                 <left>
-                    <Label fx:id="timerLabel" style="-fx-font-size:22px;">
-                    </Label>
+
                 </left>
-                <right>
-                    <JFXButton fx:id="alertButton"
-                               styleClass="dialog-trigger">Подсказка
-                    </JFXButton>
-                </right>
 
             </BorderPane>
-
-
-        </VBox>
-    </top>
-    <center>
-        <VBox alignment="CENTER" fx:id="vboxPaneImage" spacing="20">
-            <padding>
-                <Insets top="5" right="50" bottom="5" left="50"/>
-            </padding>
-
-        </VBox>
+        </bottom>
+    </BorderPane>
     </center>
     <bottom>
         <BorderPane>
-            <padding>
-                <Insets top="5" right="10" bottom="5" left="10"/>
-            </padding>
-            <center>
-                <VBox alignment="CENTER" fx:id="vboxPane" spacing="20">
-                    <TextFlow>
-                        <children>
-                            <Label fx:id="textQuestion" text="Label" wrapText="true" style="-fx-font-size: 24px" />
-                        </children>
-                    </TextFlow>
-                    <TextFlow>
-                        <children>
-                            <Label fx:id="textTip" wrapText="true"/>
-                        </children>
-                    </TextFlow>
-                    <JFXButton fx:id="nextButton" onAction="#nextQuestion"
-                               buttonType="RAISED"
-                               style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:22px;">Следующий
-                        вопрос
-                    </JFXButton>
-                </VBox>
-            </center>
-            <left>
-
-            </left>
-            <bottom>
-                <BorderPane>
-                    <right>
-                        <JFXButton fx:id="closeButton" onAction="#terminateTraining"
-                                   buttonType="RAISED"
-                                   style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">
-                            Завершить
-                            тестирование
-                        </JFXButton>
-                    </right>
-                </BorderPane>
-            </bottom>
+            <right>
+                <JFXButton fx:id="closeButton" onAction="#terminateTraining"
+                           buttonType="RAISED"
+                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;">
+                    Завершить
+                    тестирование
+                </JFXButton>
+            </right>
         </BorderPane>
     </bottom>
-
-
 </BorderPane>

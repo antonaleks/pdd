@@ -5,6 +5,7 @@ import io.datafx.controller.ViewController;
 import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,13 +24,16 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.mongodb.client.model.Filters.eq;
 
 @ViewController(value = "/fxml/EnterLoginForm.fxml")
 public class EnterFormController extends BaseController {
     @FXML
     public JFXButton enterButton;
     @FXML
-    private JFXTextField loginField;
+    private JFXComboBox<String> loginField;
     @FXML
     private JFXTextField licenseField;
     @FXML
@@ -52,11 +56,18 @@ public class EnterFormController extends BaseController {
     @PostConstruct
     public void init() throws Exception {
         errorLabel.setVisible(false);
-        loginField.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                loginField.validate();
-            }
-        });
+//        JFXComboBox.focusedProperty().addListener((o, oldVal, newVal) -> {
+//            if (!newVal) {
+//                JFXComboBox.validate();
+//            }
+//        });
+        final ObservableList<String> dummyData = FXCollections.observableArrayList();
+        List<String> userList = MongoHelper.getInstance().getUserList(eq("role", "USERS"), null).stream().map(i -> i.getName()).collect(Collectors.toList());//MongoHelper.getInstance().getDocumentList(User.class, PropertiesManager.getDbCollectionUser());
+        dummyData.addAll(userList);
+
+        loginField.setItems(dummyData);
+        loginField.setValue(dummyData.stream().findFirst().orElse(""));
+
         categoryBox.focusedProperty().addListener((o, oldVal, newVal) -> {
             if (!newVal) {
                 categoryBox.validate();
@@ -67,6 +78,8 @@ public class EnterFormController extends BaseController {
                 passwordField.validate();
             }
         });
+        loginField.setPrefSize(passwordField.getPrefWidth(), passwordField.getPrefHeight());
+
         categoryBox.setItems(FXCollections.observableArrayList(Category.AB, Category.CD));
         categoryBox.getSelectionModel().select(Category.AB);
     }
@@ -75,7 +88,7 @@ public class EnterFormController extends BaseController {
 
         if (MongoHelper.getInstance().checkLicense()) {
 
-            User newUser = new User(loginField.getText(), passwordField.getText());
+            User newUser = new User(loginField.getValue(), passwordField.getText());
             List<User> userList = MongoHelper.getInstance().getDocumentList(User.class, PropertiesManager.getDbCollectionUser());
             User currentUser = userList.stream().filter(user -> user.equals(newUser)).findFirst().orElse(null);
 

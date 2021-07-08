@@ -3,16 +3,20 @@ package org.antonaleks.pdd.controllers;
 import com.jfoenix.controls.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -47,9 +51,9 @@ public class ExamController extends BaseController {
     @FXML
     public Label textQuestion;
     public ImageView imageView;
-    public StackPane buttonStackPane;
+    public ScrollPane buttonStackPane;
     public StackPane listStackPane;
-
+    public VBox vboxPaneImage;
     private Timeline timeline;
     public Label timerLabel;
     public JFXButton alertButton;
@@ -59,16 +63,18 @@ public class ExamController extends BaseController {
     private Exam exam;
     private AtomicInteger time;
     public VBox vboxPane;
+    public BorderPane borderPane;
 
     @FXML
     public void initialize() throws IOException {
+        super.initialize();
         exam = new Exam(Session.getInstance().getCurrentCategory());
         setInitProps();
     }
 
     public void setInitProps() throws IOException {
-        vboxPane.getChildren().add(0, new Label());
-        vboxPane.getChildren().add(2, new Label());
+        vboxPaneImage.getChildren().add(0, new Label());
+        vboxPane.getChildren().add(1, new Label());
         buttons = new ArrayList<>();
         fillButtonsQuestion(0, 20);
 
@@ -132,6 +138,10 @@ public class ExamController extends BaseController {
 
             ArrayList<Node> children = new ArrayList<>(buttons.subList(subFrom, subTo));
             masonryPane.getChildren().addAll(children);
+            Platform.runLater(() -> buttonStackPane.requestLayout());
+
+            JFXScrollPane.smoothScrolling(buttonStackPane);
+
         }
     }
 
@@ -191,8 +201,9 @@ public class ExamController extends BaseController {
     }
 
     private void setQuestionForButton(Question question, JFXButton button) {
-
+//        this.updateSize();
         textQuestion.setText(question.getText());
+        textQuestion.setMaxWidth(width / 1.1);
 
 
         ObservableList<Option> observableListQuestion = FXCollections.observableArrayList();
@@ -217,7 +228,9 @@ public class ExamController extends BaseController {
                 if (item != null) {
                     int id = getIndex() + 1;
                     Text text = new Text("" + id + ". " + item);
-                    text.setWrappingWidth(700);
+                    setWrapText(true);
+                    setPrefWidth(width / 2.1);
+                    setFont(Font.font(16));
                     correct = question.getRightOption() == item.getId();
                     setGraphic(text);
                     if (item.isChecked())
@@ -238,7 +251,7 @@ public class ExamController extends BaseController {
 
         });
         topicsListView.autosize();
-        vboxPane.getChildren().set(2, topicsListView);
+        vboxPane.getChildren().set(1, topicsListView);
 
         ImageView imageView = new ImageView();
 
@@ -246,19 +259,26 @@ public class ExamController extends BaseController {
             ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(question.getImage().getBytes()));
             Image img = new Image(bis);
             imageView.setImage(img);
-//
-//            imageView.fitHeightProperty().set(height/5);
-//            imageView.fitWidthProperty().set(width/5);
+            imageView.setFitHeight(1000);
 
             ImageViewPane viewPane = new ImageViewPane(imageView);
-            viewPane.setMaxWidth(1000);
-            vboxPane.getChildren().set(0, viewPane);
+            viewPane.setMaxWidth(1200);
+            viewPane.setMaxHeight(450);
+            vboxPaneImage.getChildren().set(0, viewPane);
+
+            borderPane.setCenter(null);
+            borderPane.setBottom(null);
+            borderPane.setCenter(vboxPaneImage);
+            borderPane.setBottom(vboxPane);
 
         } catch (Exception ex) {
             imageView.setImage(null);
             imageView.fitHeightProperty().set(0);
             imageView.fitWidthProperty().set(0);
-            vboxPane.getChildren().set(0, new ImageViewPane());
+            vboxPaneImage.getChildren().set(0, new ImageViewPane());
+            borderPane.setCenter(null);
+            borderPane.setBottom(null);
+            borderPane.setCenter(vboxPane);
 
 
         }
