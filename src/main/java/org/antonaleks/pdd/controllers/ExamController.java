@@ -17,7 +17,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -66,15 +65,16 @@ public class ExamController extends BaseController {
     public BorderPane borderPane;
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize() {
         super.initialize();
         exam = new Exam(Session.getInstance().getCurrentCategory());
         setInitProps();
     }
 
-    public void setInitProps() throws IOException {
+    public void setInitProps() {
         vboxPaneImage.getChildren().add(0, new Label());
         vboxPane.getChildren().add(1, new Label());
+
         buttons = new ArrayList<>();
         fillButtonsQuestion(0, 20);
 
@@ -201,7 +201,6 @@ public class ExamController extends BaseController {
     }
 
     private void setQuestionForButton(Question question, JFXButton button) {
-//        this.updateSize();
         textQuestion.setText(question.getText());
         textQuestion.setMaxWidth(width / 1.1);
 
@@ -227,12 +226,11 @@ public class ExamController extends BaseController {
                 super.updateItem(item, empty);
                 if (item != null) {
                     int id = getIndex() + 1;
-                    Text text = new Text("" + id + ". " + item);
+                    setText("" + id + ". " + item);
                     setWrapText(true);
                     setPrefWidth(width / 2.1);
                     setFont(Font.font(16));
                     correct = question.getRightOption() == item.getId();
-                    setGraphic(text);
                     if (item.isChecked())
                         setStyle(PropertiesManager.CHECKED_EXAM_BUTTON_COLOR + "-fx-text-fill: " + PropertiesManager.DEFAULT_TEXT_COLOR);
                 }

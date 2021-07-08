@@ -13,21 +13,19 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 abstract class BaseController {
     protected static double width;
     protected static double height;
 //    protected static Stage stage;
 
     @FXML
-    void initialize() throws IOException {
+    void initialize() {
         double default_width = 800;
         double default_height = 1000;
         try {
             Rectangle2D bounds = Screen.getScreens().get(0).getBounds();
-            this.width = Math.min(bounds.getWidth() / 1.2, default_width);
-            this.height = Math.min(bounds.getHeight() / 1.1, default_height);
+            width = Math.min(bounds.getWidth() / 1.2, default_width);
+            height = Math.min(bounds.getHeight() / 1.1, default_height);
         } catch (Exception e) {
         }
     }
@@ -49,8 +47,9 @@ abstract class BaseController {
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
 //        stage.initOwner(parentWindow);
-        stage.setHeight(this.height);
-        stage.setWidth(this.width);
+        initialize();
+        stage.setHeight(height);
+        stage.setWidth(width);
         stage.setMinHeight(600);
         stage.setMinWidth(800);
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> {

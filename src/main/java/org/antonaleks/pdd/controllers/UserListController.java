@@ -220,7 +220,7 @@ public class UserListController extends BaseController {
     }
 
     @FXML
-    private void openStatistic() {
+    private void openStatistic() throws IOException {
         User selectedUser = treeTableView.getSelectionModel().getSelectedItem().getValue();
         if (selectedUser != null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(

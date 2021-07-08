@@ -34,7 +34,7 @@ public class ConfigExamController extends BaseController {
 
     }
 
-    public void startExam() {
+    public void startExam() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/fxml/Exam.fxml"));
         Parent root = null;

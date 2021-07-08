@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +64,7 @@ public class EnterFormController extends BaseController {
 //        });
         final ObservableList<String> dummyData = FXCollections.observableArrayList();
         List<String> userList = MongoHelper.getInstance().getUserList(eq("role", "USERS"), null)
-                .stream().map(User::getLogin).collect(Collectors.toList());
+                .stream().sorted(Comparator.comparing(User::getLogin, String.CASE_INSENSITIVE_ORDER)).map(User::getLogin).collect(Collectors.toList());
         dummyData.addAll(userList);
 
         loginField.setItems(dummyData);
@@ -91,7 +92,8 @@ public class EnterFormController extends BaseController {
 
             User newUser = new User(loginField.getValue(), passwordField.getText());
             List<User> userList = MongoHelper.getInstance().getDocumentList(User.class, PropertiesManager.getDbCollectionUser());
-            User currentUser = userList.stream().filter(user -> user.equals(newUser)).findFirst().orElse(null);
+            User currentUser = userList.stream().filter(user -> user.equals(newUser))
+                    .findFirst().orElse(null);
 
             if (currentUser != null) {
                 Session.getInstance().init(currentUser, categoryBox.getValue());
